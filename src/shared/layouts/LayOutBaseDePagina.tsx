@@ -39,7 +39,7 @@ export const LayOutBaseDePagina: React.FC<React.PropsWithChildren<ILayOutBaseDeP
               <Box>
                 { barraDeFerramentas }
               </Box>
-           )};
+           )}
 
            <Box flex={1} overflow="auto">
                { children }
