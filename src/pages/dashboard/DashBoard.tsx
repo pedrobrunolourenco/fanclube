@@ -1,4 +1,4 @@
-import { FerramentasDaListagem } from "../../shared/components";
+import { FerramentasDeDetalhe } from "../../shared/components";
 import { LayOutBaseDePagina } from "../../shared/layouts";
 
 export const DashBoard: React.FC = () => {
@@ -7,11 +7,12 @@ export const DashBoard: React.FC = () => {
         <LayOutBaseDePagina 
             titulo="Página Inicial" 
             barraDeFerramentas={(
-                <FerramentasDaListagem 
-                   mostrarInputBusca
-                   textoBotaoNovo="Nova"
+                <FerramentasDeDetalhe
+                   mostrarBotaoSalvarEFechar
                 />
             )}>
         </LayOutBaseDePagina>
     );
 }
+
+
