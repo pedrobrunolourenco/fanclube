@@ -16,12 +16,12 @@ export const AppRoutes = () => {
         },
         {
           icon: 'star',
-          path: '/personagem',
-          label: 'Personagem'
+          path: '/notaveis',
+          label: 'Notáveis'
         },
         {
           icon: 'person',
-          path: '/admirador',
+          path: '/admiradores',
           label: 'Admiradores'
         }
       ]);
