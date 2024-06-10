@@ -1,16 +1,19 @@
-import { useSearchParams } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 
 import { FerramentasDaListagem } from "../../shared/components"
 import { LayOutBaseDePagina } from "../../shared/layouts"
 import { useEffect, useMemo, useState } from "react";
 import { AdmiradoresService, IListagemAdmirador } from "../../shared/services/api/admiradores/AdmiradoresService";
 import { useDebounce } from "../../shared/hooks";
-import { LinearProgress, Pagination, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow } from "@mui/material";
+import { Icon, IconButton, LinearProgress, Pagination, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow } from "@mui/material";
 import { Enviroment } from "../../shared/environment";
 
 
 export const ListagemDeAdmiradores: React.FC = () => {
+    const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
+
+
 
     const {debounce} = useDebounce(3000, true);
 
@@ -20,15 +23,26 @@ export const ListagemDeAdmiradores: React.FC = () => {
 
     const pagina = useMemo(() => {
         return Number(searchParams.get('pagina') || '1');
-
     }, [searchParams]);
 
 
     const busca = useMemo(() => {
         return searchParams.get('busca') || '';
-
     }, [searchParams]);
 
+    const handleDelete = (id: number) => {
+        AdmiradoresService.deleteById(id)
+        .then(result => {
+            if (result instanceof Error) {
+            alert(result.message);
+            } else {
+            setRows(oldRows => [
+                ...oldRows.filter(oldRow => oldRow.id !== id),
+            ]);
+            alert('Registro apagado com sucesso!');
+            }
+        });
+    }
 
     useEffect( () => {
         setIsLoading(true);
@@ -74,7 +88,14 @@ export const ListagemDeAdmiradores: React.FC = () => {
                    {
                       rows.map( row => (
                         <TableRow key={row.id}>
-                            <TableCell>Ações</TableCell>
+                            <TableCell>
+                                <IconButton size="small" onClick={() => handleDelete(row.id)}>
+                                    <Icon>delete</Icon>
+                                </IconButton>
+                                <IconButton  size="small" onClick={ () => navigate(`/admiradores/detalhe/${row.id}`)} >
+                                    <Icon>edit</Icon>
+                                </IconButton>
+                            </TableCell>
                             <TableCell>{row.nomeCompleto}</TableCell>
                             <TableCell>{row.email}</TableCell>
                        </TableRow>

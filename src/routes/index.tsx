@@ -33,7 +33,7 @@ export const AppRoutes = () => {
       <Routes>
         <Route path="/pagina-inicial" element={<DashBoard />} /> 
         <Route path="/admiradores" element={<ListagemDeAdmiradores />} /> 
-
+        <Route path="/admiradores/detalhe/:id" element={<p>DETALHE ADMIRADORES</p>} /> 
 
         <Route path="*" element={<Navigate to="pagina-inicial" />} />
      </Routes>
