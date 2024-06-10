@@ -3,9 +3,44 @@
         {
             "id": 1,
             "nomeCompleto": "Pedro Bruno",
-            "email": "PedroBrunor@Rl@hotmail.com",
+            "email": "PedroBruno@hotmail.com",
             "idade": 58,
-            "notaveId": 1
+            "notavelId": 1
+        },
+        {
+            "id": 2,
+            "nomeCompleto": "Valeria Lourenco",
+            "email": "valeria@hotmail.com",
+            "idade": 60,
+            "notavelId": 1
+        },
+        {
+            "id": 3,
+            "nomeCompleto": "Jussara Lourenco",
+            "email": "jussara@hotmail.com",
+            "idade": 61,
+            "notavelId": 1
+        },
+        {
+            "id": 4,
+            "nomeCompleto": "Ancila Lourenco",
+            "email": "ancila@hotmail.com",
+            "idade": 62,
+            "notavelId": 1
+        },
+        {
+            "id": 5,
+            "nomeCompleto": "Eugenio Lourenco",
+            "email": "engenio@hotmail.com",
+            "idade": 63,
+            "notavelId": 1
+        },
+        {
+            "id": 6,
+            "nomeCompleto": "Elias Lourenco",
+            "email": "engenio@hotmail.com",
+            "idade": 64,
+            "notavelId": 1
         }
     ] 
 }

@@ -1,20 +1,20 @@
 import { Enviroment } from "../../../environment";
 import { Api } from "../axios-config";
 
-interface IListagemAdmirador {
+export interface IListagemAdmirador {
     id: number;
     nomeCompleto: string;
     email: string;
     idade: number;
-    notaveId: number;
+    notavelId: number;
 }
 
-interface IDetalheAdmirador {
+export interface IDetalheAdmirador {
     id: number;
     nomeCompleto: string;
     email: string;
     idade: number;
-    notaveId: number;
+    notavelId: number;
 }
 
 type TAdmiradorComTotalCount = {
