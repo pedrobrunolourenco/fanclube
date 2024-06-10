@@ -1,19 +1,11 @@
 {
-    "notaveis": [
+    "admiradores": [
         {
             "id": 1,
-            "nome": "Francisco Buarque de Holanda",
-            "apelido": "Chico Buarque",
-            "atividade": "Cantor e compositor",
-            "descricao": "Artista da MPB autor de opera do malando mais de 800 canções com diversos paceiros"
-        },
-        {
-            "id": 2,
-            "nome": "Francisco Buarque de Holanda",
-            "apelido": "Chico Buarque",
-            "atividade": "Cantor e compositor",
-            "descricao": "Artista da MPB autor de opera do malando mais de 800 canções com diversos paceiros"
+            "nomeCompleto": "Pedro Bruno",
+            "email": "PedroBrunor@Rl@hotmail.com",
+            "idade": 58,
+            "notaveId": 1
         }
-         
     ] 
 }
