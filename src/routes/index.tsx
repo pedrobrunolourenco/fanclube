@@ -2,6 +2,8 @@ import { Routes, Route, Navigate } from "react-router-dom"
 import { useDrawerContext } from "../shared/contexts";
 import { useEffect } from "react";
 import { DashBoard, ListagemDeAdmiradores, DetalheDeAdmiradores } from "../pages";
+import { ListagemDeNotaveis } from "../pages/notaveis/ListagemDeNotaveis";
+import { DetalheDeNotaveis } from "../pages/notaveis/DetalheDeNotaveis";
 
 export const AppRoutes = () => {
 
@@ -34,6 +36,9 @@ export const AppRoutes = () => {
         <Route path="/pagina-inicial" element={<DashBoard />} /> 
         <Route path="/admiradores" element={<ListagemDeAdmiradores />} /> 
         <Route path="/admiradores/detalhe/:id" element={<DetalheDeAdmiradores />} /> 
+
+        <Route path="/notaveis" element={<ListagemDeNotaveis />} /> 
+        <Route path="/notaveis/detalhe/:id" element={<DetalheDeNotaveis />} /> 
 
         <Route path="*" element={<Navigate to="pagina-inicial" />} />
      </Routes>

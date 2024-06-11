@@ -5,6 +5,7 @@ import { Api } from "../axios-config";
 
 export interface IListagemNotavel {
     id: number;
+    nome: string;
     apelido: string;
     atividade: string;
     descricao: string;
@@ -12,6 +13,7 @@ export interface IListagemNotavel {
 
 export interface IDetalheNotavel {
     id: number;
+    nome: string;
     apelido: string;
     atividade: string;
     desricao: string;
@@ -85,7 +87,7 @@ const deleteById = async (id: number): Promise<void | Error> => {
     }
 };
 
-export const AdmiradoresService = {
+export const NotaveisService = {
     getAll,
     getById,
     create,
