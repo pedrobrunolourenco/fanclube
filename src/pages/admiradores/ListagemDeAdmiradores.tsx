@@ -69,6 +69,7 @@ export const ListagemDeAdmiradores: React.FC = () => {
                    textoBotaoNovo="Novo"
                    mostrarInputBusca={true}
                    textoDaBusca={busca}
+                   aoClicarEmNovo={() => navigate('/admiradores/detalhe/novo') }
                    aoMudarTextoDeBusca={texto => setSearchParams({ busca: texto, pagina: '1'}, {replace: true}) }
                 />
             }
