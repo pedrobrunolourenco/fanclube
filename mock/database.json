@@ -1,24 +1,10 @@
 {
   "admiradores": [
     {
-      "id": 1,
-      "nomeCompleto": "Pedro Bruno",
-      "email": "PedroBruno@hotmail.com",
-      "idade": 58,
-      "notavelId": 1
-    },
-    {
       "id": 2,
       "nomeCompleto": "Valeria Lourenco",
       "email": "valeria@hotmail.com",
       "idade": 60,
-      "notavelId": 1
-    },
-    {
-      "id": 3,
-      "nomeCompleto": "Jussara Lourenco",
-      "email": "jussara@hotmail.com",
-      "idade": 61,
       "notavelId": 1
     },
     {
@@ -40,20 +26,6 @@
       "nomeCompleto": "Elias Lourenco",
       "email": "engenio@hotmail.com",
       "idade": 64,
-      "notavelId": 1
-    },
-    {
-      "id": 8,
-      "nomeCompleto": "Marcelo Nunes",
-      "email": "marcelonunes@hotmail.com",
-      "idade": 64,
-      "notavelId": 1
-    },
-    {
-      "id": 9,
-      "nomeCompleto": "Rafael Moreira",
-      "email": "rafa@hotmail.com",
-      "idade": 15,
       "notavelId": 1
     },
     {
@@ -83,6 +55,22 @@
       "email": "Maria@hotmail.com",
       "idade": 25,
       "notavelId": 1
+    }
+  ],
+  "notaveis": [
+    {
+      "id": 1,
+      "apelido": "Chico Buarque",
+      "nome": "Francisco Buarque de Holanda",
+      "atividade": "Compositor",
+      "Descricao": "Cantor, compositor e escritor brasileiro de renome internacional ....."
+    },
+    {
+      "id": 2,
+      "apelido": "Pelé",
+      "nome": "Edson Arantes do Nascimento",
+      "atividade": "Jogador de Futebol",
+      "Descricao": "Melhor jogador de todos os tempos...."
     }
   ]
 }
