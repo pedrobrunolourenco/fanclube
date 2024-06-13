@@ -3,7 +3,7 @@ import { LayOutBaseDePagina } from "../../shared/layouts";
 import { FerramentasDeDetalhe } from "../../shared/components";
 import { useEffect, useState } from "react";
 
-import { TextField, Box, Stack, Slide, Alert, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from "@mui/material";
+import { TextField, Box, Stack, Slide, Alert, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Paper } from "@mui/material";
 import { useForm } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
 
@@ -176,6 +176,13 @@ export const DetalheDeNotaveis: React.FC = () => {
             }
         >
             <form onSubmit={handleSubmit(onSubmit)} noValidate>
+               <Box 
+                    marginX={1} 
+                    paddingX={2} 
+                    display="flex" 
+                    gap={1} 
+                    component={Paper}>
+
                 <Stack spacing={2} width={600} margin={5}>
                     <TextField
                         autoComplete='off'
@@ -251,24 +258,27 @@ export const DetalheDeNotaveis: React.FC = () => {
                     
 
                 </Stack>
+
+              </Box>  
             </form>
             <DevTool control={control} />
-            
+ 
             <Snackbar
-                open={open}
-                TransitionComponent={(props) => <Slide {...props} direction="left" />}
-                onClose={handleClose}
-                anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "center"
-                }}
-                autoHideDuration={3000}
-            >
+                    open={open}
+                    TransitionComponent={(props) => <Slide {...props} direction="left" />}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "center"
+                    }}
+                    autoHideDuration={3000}
+                >
                 <Alert onClose={handleClose} severity={tipoMsg} sx={{ width: '100%' }}>
                     {msg}
                 </Alert>
             </Snackbar>
 
+           
             <Dialog
                 open={openDialog.isOpen}
                 onClose={handleCloseDialog}

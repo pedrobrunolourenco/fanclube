@@ -3,7 +3,7 @@ import { LayOutBaseDePagina } from "../../shared/layouts";
 import { FerramentasDeDetalhe } from "../../shared/components";
 import { useEffect, useMemo, useState } from "react";
 import { AdmiradoresService, IDetalheAdmirador } from "../../shared/services/api/admiradores/AdmiradoresService";
-import { TextField, Box, Stack, Snackbar, Slide, Alert, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Autocomplete, CircularProgress } from "@mui/material";
+import { TextField, Box, Stack, Snackbar, Slide, Alert, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Autocomplete, CircularProgress, Paper } from "@mui/material";
 import { useForm, Controller } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
 import { useDebounce } from "../../shared/hooks";
@@ -28,7 +28,7 @@ export const DetalheDeAdmiradores: React.FC = () => {
     useEffect(() => {
         setIsLoading(true);
         debounce(() => {
-            NotaveisService.getAll(1, "")
+            NotaveisService.getAllSemFiltro()
                 .then((result) => {
                     setIsLoading(false);
                     if (result instanceof Error) {
@@ -204,6 +204,13 @@ export const DetalheDeAdmiradores: React.FC = () => {
             }
         >
             <form onSubmit={handleSubmit(onSubmit)} noValidate>
+                <Box 
+                    marginX={1} 
+                    paddingX={2} 
+                    display="flex" 
+                    gap={1} 
+                    component={Paper}>
+
                 <Stack spacing={2} width={600} margin={5}>
                     <TextField
                         autoComplete='off'
@@ -228,6 +235,7 @@ export const DetalheDeAdmiradores: React.FC = () => {
                         label="E-Mail"
                         type="email"
                         variant="outlined"
+                        color="primary"
                         InputLabelProps={{ shrink: true }}
                         {...register("email", {
                             required: "E-Mail é obrigatório",
@@ -304,6 +312,7 @@ export const DetalheDeAdmiradores: React.FC = () => {
                         )}
                     />
                 </Stack>
+                </Box>
             </form>
 
             <DevTool control={control} />

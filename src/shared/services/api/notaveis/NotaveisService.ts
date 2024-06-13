@@ -26,11 +26,7 @@ type TNotavelComTotalCount = {
 
 const getAll = async (page = 1, filter = ''): Promise<TNotavelComTotalCount | Error> => {
     try {
-        var urlRelativa = `/notaveis?_page=${page}&_limit=${Enviroment.LIMITE_DE_LINHAS}&nome_like=${filter}`;
-        if(filter == "")
-        {
-            urlRelativa = `/notaveis?_page=${page}`;
-        }
+        const urlRelativa = `/notaveis?_page=${page}&_limit=${Enviroment.LIMITE_DE_LINHAS}&nome_like=${filter}`;
 
         const { data, headers } = await Api.get(urlRelativa);
         
@@ -48,6 +44,25 @@ const getAll = async (page = 1, filter = ''): Promise<TNotavelComTotalCount | Er
     }
 };
 
+const getAllSemFiltro = async (): Promise<TNotavelComTotalCount | Error> => {
+    try {
+        var urlRelativa = '/notaveis';
+
+        const { data, headers } = await Api.get(urlRelativa);
+        
+        if (data) {
+            return {
+                data,
+                totalCount: Number(headers['x-total-count'] || Enviroment.LIMITE_DE_LINHAS),
+            };
+        }
+
+        return new Error('Erro ao listar notáveis.');
+    } catch (error) {
+        console.log(error);
+        return new Error((error as { message: string }).message || 'Erro ao listar notáveis.');
+    }
+};
 
 
 
@@ -98,6 +113,7 @@ const deleteById = async (id: number): Promise<void | Error> => {
 
 export const NotaveisService = {
     getAll,
+    getAllSemFiltro,
     getById,
     create,
     updateById,
