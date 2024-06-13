@@ -280,7 +280,7 @@ export const DetalheDeNotaveis: React.FC = () => {
                 </DialogTitle>
                 <DialogContent>
                 <DialogContentText>
-                    Caso confirme, o registro será excluído definitivamente da base de dados!
+                    Caso confirme, o NOTÁVEL será excluído definitivamente da base de dados!
                 </DialogContentText>
                 </DialogContent>
                 <DialogActions>

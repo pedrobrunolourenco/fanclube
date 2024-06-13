@@ -4,77 +4,122 @@ import { FerramentasDeDetalhe } from "../../shared/components";
 import { useEffect, useState } from "react";
 import { AdmiradoresService, IDetalheAdmirador } from "../../shared/services/api/admiradores/AdmiradoresService";
 
-import { TextField, Box, Stack, Snackbar } from "@mui/material";
+import { TextField, Box, Stack, Snackbar, Slide, Alert, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from "@mui/material";
 import { useForm } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
 
-type FormValues = {
-   id: number;
-   nomeCompleto: string;
-   email: string;
-   idade: number;
-   notavelId: number;
-}
 
 export const DetalheDeAdmiradores: React.FC = () => {
     const { id = 'novo' } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [nome, setNome] = useState("");
 
-    const { register, handleSubmit, formState, control, setValue } = useForm<FormValues>({
+    const [open, setOpen] = useState(false);
+    const [openDialog, setOpenDialoog] = useState({
+        isOpen: false,
+        id: 0
+    });
+
+    const [msg, setMsg] = useState("");
+    const [tipoMsg, setTipoMsg] = useState<any>("warning");
+
+    const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === "clickaway") {
+            return;
+        }
+        navigate('/admiradores');
+        setOpen(false);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialoog({
+            isOpen: false,
+            id: 0
+        });
+    };
+
+    const handleDeleteDialog = (id: number) => {
+        AdmiradoresService.deleteById(id)
+        .then(result => {
+            if (result instanceof Error) {
+                handleCloseDialog();
+                setTipoMsg("error");
+                setMsg("Erro ao excluir um admirador")
+                setOpen(true);
+            } else {
+                handleCloseDialog();
+                setTipoMsg("success");
+                setMsg("Admirador exccluído com sucesso!")
+                setOpen(true);
+        }
+        });        
+    };
+
+
+    // aqui
+    const { register, handleSubmit, formState, control, setValue } = useForm<IDetalheAdmirador>({
         defaultValues: {
             id: id === 'novo' ? undefined : Number(id),
             nomeCompleto: '',
             email: '',
             idade: 0,
-            notavelId: 0,
+            notavelId: 0
         }
     });
+
+      
+
+
     const { errors } = formState;
 
-    const onSubmit = (data: FormValues) => {
+    const onSubmit = (data: IDetalheAdmirador) => {
         handleSalvar(data);
     };
 
     const handleDelete = (id: number) => {
-        AdmiradoresService.deleteById(id)
-        .then(result => {
-            if (result instanceof Error) {
-                alert(result.message);
-            } else {
-                alert('Registro apagado com sucesso!');
-                navigate('/admiradores');
-            }
+        setOpenDialoog({
+            isOpen: true,
+            id: id
         });
     }
 
-    const handleSalvar = (data: FormValues) => {
-        
-        console.log('Dados do formulário:', data);
+    const handleSalvar = (data: IDetalheAdmirador) => {
         
         // incluir
         if(id === "novo")
         {
+            AdmiradoresService.create(data).then(result => {
+                if (result instanceof Error) {
+                    setTipoMsg("error");
+                    setMsg("Erro ao incluir um admirador")
+                    setOpen(true);
 
+                } else {
+                    setTipoMsg("success");
+                    setMsg("Admirador incluído com sucesso!")
+                    setOpen(true);
+                }
+            });
         }
 
         // alterar
         if(id !== "novo")
         {
 
+            AdmiradoresService.updateById(data.id, data).then(result => {
+                if (result instanceof Error) {
+                    setTipoMsg("error");
+                    setMsg("Erro ao atualizar um admirador")
+                    setOpen(true);
+
+                } else {
+                    setTipoMsg("success");
+                    setMsg("Admirador atualizado com sucesso!")
+                    setOpen(true);
+                }
+            });
         }
-    
 
-
-        // Lógica para salvar os dados
-        // AdmiradoresService.save(data).then(result => {
-        //     if (result instanceof Error) {
-        //         alert(result.message);
-        //     } else {
-        //         alert('Registro salvo com sucesso!');
-        //         navigate('/admiradores');
-        //     }
-        // });
     }
 
     useEffect(() => {
@@ -82,7 +127,6 @@ export const DetalheDeAdmiradores: React.FC = () => {
             AdmiradoresService.getById(Number(id))
             .then((result) => {
                 if (result instanceof Error) {
-                    alert(result.message);
                     navigate('/admiradores');
                 } else {
                     setNome(result.nomeCompleto);
@@ -95,7 +139,10 @@ export const DetalheDeAdmiradores: React.FC = () => {
         }
     }, [id]);
 
+
+
     const atribuirForm = (data: IDetalheAdmirador) => {
+        setValue('id', data.id);
         setValue('nomeCompleto', data.nomeCompleto);
         setValue('email', data.email);
         setValue('idade', data.idade);
@@ -103,7 +150,7 @@ export const DetalheDeAdmiradores: React.FC = () => {
     }
 
     const limparForm= () => {
-        setValue('id',0);
+        setValue('id', 0);
         setValue('nomeCompleto', '');
         setValue('email', '');
         setValue('idade', 0);
@@ -181,6 +228,46 @@ export const DetalheDeAdmiradores: React.FC = () => {
                 </Stack>
             </form>
             <DevTool control={control} />
+
+            <Snackbar
+                open={open}
+                TransitionComponent={(props) => <Slide {...props} direction="left" />}
+                onClose={handleClose}
+                anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "center"
+                }}
+                autoHideDuration={6000}
+            >
+                <Alert onClose={handleClose} severity={tipoMsg} sx={{ width: '100%' }}>
+                    {msg}
+                </Alert>
+            </Snackbar>
+
+            <Dialog
+                open={openDialog.isOpen}
+                onClose={handleCloseDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle>
+                    {"Confirma a exclusão do admirador?"}
+                </DialogTitle>
+                <DialogContent>
+                <DialogContentText>
+                    Caso confirme, o ADMIRADOR será excluído definitivamente da base de dados!
+                </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                <Button onClick={(id) => handleDeleteDialog(openDialog.id)}>Sim</Button>
+                <Button onClick={handleCloseDialog} autoFocus>
+                    Não
+                </Button>
+                </DialogActions>
+            </Dialog>            
+
+
+
         </LayOutBaseDePagina>
     );
 }

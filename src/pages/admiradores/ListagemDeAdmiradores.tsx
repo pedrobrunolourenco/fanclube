@@ -4,7 +4,7 @@ import { LayOutBaseDePagina } from "../../shared/layouts";
 import { useEffect, useMemo, useState } from "react";
 import { AdmiradoresService, IListagemAdmirador } from "../../shared/services/api/admiradores/AdmiradoresService";
 import { useDebounce } from "../../shared/hooks";
-import { Icon, IconButton, LinearProgress, Pagination, Paper, Slide, Snackbar, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow, Alert } from "@mui/material";
+import { Icon, IconButton, LinearProgress, Pagination, Paper, Slide, Snackbar, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow, Alert, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from "@mui/material";
 import { Enviroment } from "../../shared/environment";
 
 export const ListagemDeAdmiradores: React.FC = () => {
@@ -12,13 +12,48 @@ export const ListagemDeAdmiradores: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
 
     const [open, setOpen] = useState(false);
+    const [openDialog, setOpenDialoog] = useState({
+        isOpen: false,
+        id: 0
+    });
+
     const [msg, setMsg] = useState("");
+    const [tipoMsg, setTipoMsg] = useState<any>("warning");
 
     const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === "clickaway") {
             return;
         }
+        navigate('/admiradores');
         setOpen(false);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialoog({
+            isOpen: false,
+            id: 0
+        });
+    };
+
+    const handleDeleteDialog = (id: number) => {
+        AdmiradoresService.deleteById(id)
+        .then(result => {
+            if (result instanceof Error) {
+                handleCloseDialog();
+                setTipoMsg("error");
+                setMsg("Erro ao excluir um admirador")
+                setOpen(true);
+            } else {
+                setRows(oldRows => [
+                    ...oldRows.filter(oldRow => oldRow.id !== id),
+                ]);
+
+                handleCloseDialog();
+                setTipoMsg("success");
+                setMsg("Admirador exccluído com sucesso!")
+                setOpen(true);
+        }
+        });        
     };
 
     const { debounce } = useDebounce(3000, true);
@@ -36,19 +71,10 @@ export const ListagemDeAdmiradores: React.FC = () => {
     }, [searchParams]);
 
     const handleDelete = (id: number) => {
-        setMsg("Registro deletado com sucesso!");
-        setOpen(true);
-        // AdmiradoresService.deleteById(id)
-        // .then(result => {
-        //     if (result instanceof Error) {
-        //     alert(result.message);
-        //     } else {
-        //     setRows(oldRows => [
-        //         ...oldRows.filter(oldRow => oldRow.id !== id),
-        //     ]);
-        //     alert('Registro apagado com sucesso!');
-        //     }
-        // });
+        setOpenDialoog({
+            isOpen: true,
+            id: id
+        });
     };
 
     useEffect(() => {
@@ -145,10 +171,32 @@ export const ListagemDeAdmiradores: React.FC = () => {
                 }}
                 autoHideDuration={6000}
             >
-                <Alert onClose={handleClose} severity="success"  sx={{ width: '100%' }}>
+                <Alert onClose={handleClose} severity={tipoMsg} sx={{ width: '100%' }}>
                     {msg}
                 </Alert>
             </Snackbar>
+
+            <Dialog
+                open={openDialog.isOpen}
+                onClose={handleCloseDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle>
+                    {"Confirma a exclusão do registro?"}
+                </DialogTitle>
+                <DialogContent>
+                <DialogContentText>
+                    Caso confirme, o ADMIRADOR será excluído definitivamente da base de dados!
+                </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                <Button onClick={(id) => handleDeleteDialog(openDialog.id)}>Sim</Button>
+                <Button onClick={handleCloseDialog} autoFocus>Não</Button>
+                </DialogActions>
+            </Dialog>            
+
+
         </LayOutBaseDePagina>
     );
 }
