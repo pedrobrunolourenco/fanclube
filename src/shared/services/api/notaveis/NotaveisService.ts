@@ -16,7 +16,7 @@ export interface IDetalheNotavel {
     nome: string;
     apelido: string;
     atividade: string;
-    desricao: string;
+    descricao: string;
 }
 
 type TNotavelComTotalCount = {

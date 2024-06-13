@@ -4,7 +4,7 @@ import { FerramentasDaListagem } from "../../shared/components"
 import { LayOutBaseDePagina } from "../../shared/layouts"
 import { useEffect, useMemo, useState } from "react";
 import { useDebounce } from "../../shared/hooks";
-import { Icon, IconButton, LinearProgress, Pagination, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow } from "@mui/material";
+import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Icon, IconButton, LinearProgress, Pagination, Paper, Slide, Snackbar, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow } from "@mui/material";
 import { Enviroment } from "../../shared/environment";
 import { IListagemNotavel, NotaveisService } from "../../shared/services/api/notaveis/NotaveisService";
 
@@ -12,6 +12,52 @@ import { IListagemNotavel, NotaveisService } from "../../shared/services/api/not
 export const ListagemDeNotaveis: React.FC = () => {
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
+
+    const [open, setOpen] = useState(false);
+    const [openDialog, setOpenDialoog] = useState({
+        isOpen: false,
+        id: 0
+    });
+
+    const [msg, setMsg] = useState("");
+    const [tipoMsg, setTipoMsg] = useState<any>("warning");
+
+    const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === "clickaway") {
+            return;
+        }
+        navigate('/notaveis');
+        setOpen(false);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialoog({
+            isOpen: false,
+            id: 0
+        });
+    };
+
+    const handleDeleteDialog = (id: number) => {
+        NotaveisService.deleteById(id)
+        .then(result => {
+            if (result instanceof Error) {
+                handleCloseDialog();
+                setTipoMsg("error");
+                setMsg("Erro ao excluir um notável")
+                setOpen(true);
+            } else {
+                setRows(oldRows => [
+                    ...oldRows.filter(oldRow => oldRow.id !== id),
+                ]);
+
+                handleCloseDialog();
+                setTipoMsg("success");
+                setMsg("Notável exccluído com sucesso!")
+                setOpen(true);
+        }
+        });        
+    };
+
 
 
 
@@ -31,16 +77,9 @@ export const ListagemDeNotaveis: React.FC = () => {
     }, [searchParams]);
 
     const handleDelete = (id: number) => {
-        NotaveisService.deleteById(id)
-        .then(result => {
-            if (result instanceof Error) {
-            alert(result.message);
-            } else {
-            setRows(oldRows => [
-                ...oldRows.filter(oldRow => oldRow.id !== id),
-            ]);
-            alert('Registro apagado com sucesso!');
-            }
+        setOpenDialoog({
+            isOpen: true,
+            id: id
         });
     }
 
@@ -136,6 +175,42 @@ export const ListagemDeNotaveis: React.FC = () => {
 
             </Table>
          </TableContainer>
+
+         <Snackbar
+                open={open}
+                TransitionComponent={(props) => <Slide {...props} direction="left" />}
+                onClose={handleClose}
+                anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "center"
+                }}
+                autoHideDuration={6000}
+            >
+                <Alert onClose={handleClose} severity={tipoMsg} sx={{ width: '100%' }}>
+                    {msg}
+                </Alert>
+            </Snackbar>
+
+            <Dialog
+                open={openDialog.isOpen}
+                onClose={handleCloseDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle>
+                    {"Confirma a exclusão do registro?"}
+                </DialogTitle>
+                <DialogContent>
+                <DialogContentText>
+                    Caso confirme, o registro será excluído definitivamente da base de dados!
+                </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                <Button onClick={(id) => handleDeleteDialog(openDialog.id)}>Sim</Button>
+                <Button onClick={handleCloseDialog} autoFocus>Não</Button>
+                </DialogActions>
+            </Dialog>            
+
 
 
         </LayOutBaseDePagina>

@@ -3,28 +3,62 @@ import { LayOutBaseDePagina } from "../../shared/layouts";
 import { FerramentasDeDetalhe } from "../../shared/components";
 import { useEffect, useState } from "react";
 
-import { TextField, Box, Stack } from "@mui/material";
+import { TextField, Box, Stack, Slide, Alert, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from "@mui/material";
 import { useForm } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
 
 import { NotaveisService, IDetalheNotavel } from "../../shared/services/api/notaveis/NotaveisService";
 import React from "react";
-
-
-type FormValues = {
-   id: number;
-   nome: string;
-   apelido: string;
-   atividade: string;
-   descricao: string;
-}
+import Snackbar from '@mui/material/Snackbar';
 
 export const DetalheDeNotaveis: React.FC = () => {
     const { id = 'novo' } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [nome, setNome] = useState("");
 
-    const { register, handleSubmit, formState, control, setValue } = useForm<FormValues>({
+    const [open, setOpen] = useState(false);
+    const [openDialog, setOpenDialoog] = useState({
+        isOpen: false,
+        id: 0
+    });
+
+    const [msg, setMsg] = useState("");
+    const [tipoMsg, setTipoMsg] = useState<any>("warning");
+
+    const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === "clickaway") {
+            return;
+        }
+        navigate('/notaveis');
+        setOpen(false);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialoog({
+            isOpen: false,
+            id: 0
+        });
+    };
+
+    const handleDeleteDialog = (id: number) => {
+        NotaveisService.deleteById(id)
+        .then(result => {
+            if (result instanceof Error) {
+                handleCloseDialog();
+                setTipoMsg("error");
+                setMsg("Erro ao excluir um notável")
+                setOpen(true);
+            } else {
+                handleCloseDialog();
+                setTipoMsg("success");
+                setMsg("Notável exccluído com sucesso!")
+                setOpen(true);
+        }
+        });        
+    };
+
+
+    const { register, handleSubmit, formState, control, setValue } = useForm<IDetalheNotavel>({
         defaultValues: {
             id: id === 'novo' ? undefined : Number(id),
             nome: '',
@@ -33,51 +67,60 @@ export const DetalheDeNotaveis: React.FC = () => {
             descricao: ''
         }
     });
+
+
     const { errors } = formState;
 
-    const onSubmit = (data: FormValues) => {
+    const onSubmit = (data: IDetalheNotavel) => {
         handleSalvar(data);
     };
 
     const handleDelete = (id: number) => {
-        NotaveisService.deleteById(id)
-        .then(result => {
-            if (result instanceof Error) {
-                alert(result.message);
-            } else {
-                alert('Registro apagado com sucesso!');
-                navigate('/admiradores');
-            }
+        setOpenDialoog({
+            isOpen: true,
+            id: id
         });
     }
 
-    const handleSalvar = (data: FormValues) => {
-        
-        console.log('Dados do formulário:', data);
 
+
+    const handleSalvar = (data: IDetalheNotavel) => {
+        
         // incluir
         if(id === "novo")
         {
+            NotaveisService.create(data).then(result => {
+                if (result instanceof Error) {
+                    setTipoMsg("error");
+                    setMsg("Erro ao incluir um notável")
+                    setOpen(true);
 
+                } else {
+                    setTipoMsg("success");
+                    setMsg("Notável incluído com sucesso!")
+                    setOpen(true);
+                }
+            });
         }
 
         // alterar
         if(id !== "novo")
         {
 
+            NotaveisService.updateById(data.id, data).then(result => {
+                if (result instanceof Error) {
+                    setTipoMsg("error");
+                    setMsg("Erro ao atualizar um notável")
+                    setOpen(true);
+
+                } else {
+                    setTipoMsg("success");
+                    setMsg("Notável atualizado com sucesso!")
+                    setOpen(true);
+                }
+            });
         }
-    
 
-
-        // Lógica para salvar os dados
-        // NotaveisService.save(data).then(result => {
-        //     if (result instanceof Error) {
-        //         alert(result.message);
-        //     } else {
-        //         alert('Registro salvo com sucesso!');
-        //         navigate('/admiradores');
-        //     }
-        // });
     }
 
     useEffect(() => {
@@ -98,11 +141,14 @@ export const DetalheDeNotaveis: React.FC = () => {
         }
     }, [id]);
 
+
+
     const atribuirForm = (data: IDetalheNotavel) => {
+        setValue('id', data.id);
         setValue('nome', data.nome);
         setValue('apelido', data.apelido);
         setValue('atividade', data.atividade);
-        setValue('descricao', data.desricao);
+        setValue('descricao', data.descricao);
     }
 
     const limparForm= () => {
@@ -114,18 +160,17 @@ export const DetalheDeNotaveis: React.FC = () => {
     }
 
     return (
+
+
+        
         <LayOutBaseDePagina 
             titulo={id === "novo" ? 'Novo Notável' : nome}
             barraDeFerramentas={
                 <FerramentasDeDetalhe 
                     textoBotaoNovo="Novo"
-                    mostrarBotaoSalvarEFechar
                     mostrarBotaoApagar={id !== "novo"}
-                    mostrarBotaoNovo={id !== "novo"}
                     aoClicarEmSalvar={handleSubmit(handleSalvar)}
-                    aoClicarEmSalvarEFechar={() => {}}
                     aoClicarEmApagar={() => handleDelete(Number(id))}
-                    aoClicarEmNovo={() => navigate('/notaveis/detalhe/novo')}
                     aoClicarEmVoltar={() => navigate('/notaveis')}
                 />
             }
@@ -203,10 +248,49 @@ export const DetalheDeNotaveis: React.FC = () => {
                         error={!!errors.descricao}
                         helperText={errors.descricao?.message}
                     />
+                    
 
                 </Stack>
             </form>
             <DevTool control={control} />
+            
+            <Snackbar
+                open={open}
+                TransitionComponent={(props) => <Slide {...props} direction="left" />}
+                onClose={handleClose}
+                anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "center"
+                }}
+                autoHideDuration={6000}
+            >
+                <Alert onClose={handleClose} severity={tipoMsg} sx={{ width: '100%' }}>
+                    {msg}
+                </Alert>
+            </Snackbar>
+
+            <Dialog
+                open={openDialog.isOpen}
+                onClose={handleCloseDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle>
+                    {"Confirma a exclusão do registro?"}
+                </DialogTitle>
+                <DialogContent>
+                <DialogContentText>
+                    Caso confirme, o registro será excluído definitivamente da base de dados!
+                </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                <Button onClick={(id) => handleDeleteDialog(openDialog.id)}>Sim</Button>
+                <Button onClick={handleCloseDialog} autoFocus>
+                    Não
+                </Button>
+                </DialogActions>
+            </Dialog>            
+
         </LayOutBaseDePagina>
     );
 }

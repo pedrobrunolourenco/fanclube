@@ -7,10 +7,7 @@ export const DashBoard: React.FC = () => {
         <LayOutBaseDePagina 
             titulo="Página Inicial" 
             barraDeFerramentas={(
-                <FerramentasDeDetalhe
-                   mostrarBotaoSalvarEFechar
-                   mostrarBotaoNovo
-                />
+                <FerramentasDeDetalhe />
             )}>
         </LayOutBaseDePagina>
     );

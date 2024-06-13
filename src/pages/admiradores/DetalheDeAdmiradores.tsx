@@ -4,7 +4,7 @@ import { FerramentasDeDetalhe } from "../../shared/components";
 import { useEffect, useState } from "react";
 import { AdmiradoresService, IDetalheAdmirador } from "../../shared/services/api/admiradores/AdmiradoresService";
 
-import { TextField, Box, Stack } from "@mui/material";
+import { TextField, Box, Stack, Snackbar } from "@mui/material";
 import { useForm } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
 
@@ -51,7 +51,7 @@ export const DetalheDeAdmiradores: React.FC = () => {
     const handleSalvar = (data: FormValues) => {
         
         console.log('Dados do formulário:', data);
-
+        
         // incluir
         if(id === "novo")
         {
@@ -116,13 +116,9 @@ export const DetalheDeAdmiradores: React.FC = () => {
             barraDeFerramentas={
                 <FerramentasDeDetalhe 
                     textoBotaoNovo="Novo"
-                    mostrarBotaoSalvarEFechar
                     mostrarBotaoApagar={id !== "novo"}
-                    mostrarBotaoNovo={id !== "novo"}
                     aoClicarEmSalvar={handleSubmit(handleSalvar)}
-                    aoClicarEmSalvarEFechar={() => {}}
                     aoClicarEmApagar={() => handleDelete(Number(id))}
-                    aoClicarEmNovo={() => navigate('/admiradores/detalhe/novo')}
                     aoClicarEmVoltar={() => navigate('/admiradores')}
                 />
             }
