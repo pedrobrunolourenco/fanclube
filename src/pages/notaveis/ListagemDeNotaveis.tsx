@@ -61,7 +61,7 @@ export const ListagemDeNotaveis: React.FC = () => {
 
 
 
-    const {debounce} = useDebounce(3000, true);
+    const {debounce} = useDebounce(1000, true);
 
     const [rows, setRows] = useState<IListagemNotavel[]>([]);
     const [totalCount, setTotalCount] = useState(0);

@@ -14,7 +14,7 @@ export interface IDetalheAdmirador {
     nomeCompleto: string;
     email: string;
     idade: number;
-    notavelId: number;
+    notavelId: number | undefined;
 }
 
 type TAdmiradorComTotalCount = {
