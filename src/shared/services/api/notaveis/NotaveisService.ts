@@ -26,7 +26,12 @@ type TNotavelComTotalCount = {
 
 const getAll = async (page = 1, filter = ''): Promise<TNotavelComTotalCount | Error> => {
     try {
-        const urlRelativa = `/notaveis?_page=${page}&_limit=${Enviroment.LIMITE_DE_LINHAS}&nome_like=${filter}`;
+        var urlRelativa = `/notaveis?_page=${page}&_limit=${Enviroment.LIMITE_DE_LINHAS}&nome_like=${filter}`;
+        if(filter == "")
+        {
+            urlRelativa = `/notaveis?_page=${page}`;
+        }
+
         const { data, headers } = await Api.get(urlRelativa);
         
         if (data) {
@@ -42,6 +47,10 @@ const getAll = async (page = 1, filter = ''): Promise<TNotavelComTotalCount | Er
         return new Error((error as { message: string }).message || 'Erro ao listar notáveis.');
     }
 };
+
+
+
+
 
 const getById = async (id: number): Promise<IDetalheNotavel| Error> => {
     try {

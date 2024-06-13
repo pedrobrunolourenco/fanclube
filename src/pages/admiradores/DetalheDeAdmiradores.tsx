@@ -28,7 +28,7 @@ export const DetalheDeAdmiradores: React.FC = () => {
     useEffect(() => {
         setIsLoading(true);
         debounce(() => {
-            NotaveisService.getAll(1, busca)
+            NotaveisService.getAll(1, "")
                 .then((result) => {
                     setIsLoading(false);
                     if (result instanceof Error) {
@@ -59,8 +59,19 @@ export const DetalheDeAdmiradores: React.FC = () => {
         if (reason === "clickaway") {
             return;
         }
-        navigate('/admiradores');
-        setOpen(false);
+
+        // aqui pedro
+        if (id === "novo") {
+            limparForm();
+            setOpen(false);
+        }
+        else
+        {
+            // navigate('/admiradores');
+            setOpen(false);
+        }
+
+
     };
 
     const handleCloseDialog = () => {
@@ -305,7 +316,7 @@ export const DetalheDeAdmiradores: React.FC = () => {
                     vertical: "bottom",
                     horizontal: "center"
                 }}
-                autoHideDuration={6000}
+                autoHideDuration={3000}
             >
                 <Alert onClose={handleClose} severity={tipoMsg} sx={{ width: '100%' }}>
                     {msg}

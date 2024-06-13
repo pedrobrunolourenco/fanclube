@@ -184,7 +184,7 @@ export const ListagemDeNotaveis: React.FC = () => {
                     vertical: "bottom",
                     horizontal: "center"
                 }}
-                autoHideDuration={6000}
+                autoHideDuration={3000}
             >
                 <Alert onClose={handleClose} severity={tipoMsg} sx={{ width: '100%' }}>
                     {msg}
