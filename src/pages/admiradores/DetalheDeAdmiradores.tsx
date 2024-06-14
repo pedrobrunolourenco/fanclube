@@ -59,19 +59,14 @@ export const DetalheDeAdmiradores: React.FC = () => {
         if (reason === "clickaway") {
             return;
         }
-
-        // aqui pedro
         if (id === "novo") {
             limparForm();
             setOpen(false);
         }
         else
         {
-            // navigate('/admiradores');
             setOpen(false);
         }
-
-
     };
 
     const handleCloseDialog = () => {
@@ -94,6 +89,7 @@ export const DetalheDeAdmiradores: React.FC = () => {
                     setTipoMsg("success");
                     setMsg("Admirador excluído com sucesso!")
                     setOpen(true);
+                    navigate('/admiradores');
                 }
             });
     };
@@ -297,11 +293,7 @@ export const DetalheDeAdmiradores: React.FC = () => {
                                         variant="outlined"
                                         InputLabelProps={{ shrink: true }}
                                         {...register("notavelId", {
-                                            required: "Seu fã numero 1 é obrigatório",
-                                            min: {
-                                                value: 0,
-                                                message: "Informe seu fã número 1"
-                                            }
+                                            required: "Seu fã numero 1 é obrigatório"
                                         })}
                                         error={!!errors.notavelId}
                                         helperText={errors.notavelId?.message}

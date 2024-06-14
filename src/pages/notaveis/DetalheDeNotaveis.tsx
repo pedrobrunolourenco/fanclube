@@ -29,8 +29,14 @@ export const DetalheDeNotaveis: React.FC = () => {
         if (reason === "clickaway") {
             return;
         }
-        navigate('/notaveis');
-        setOpen(false);
+        if (id === "novo") {
+            limparForm();
+            setOpen(false);
+        }
+        else
+        {
+            setOpen(false);
+        }
     };
 
     const handleCloseDialog = () => {
@@ -53,6 +59,7 @@ export const DetalheDeNotaveis: React.FC = () => {
                 setTipoMsg("success");
                 setMsg("Notável exccluído com sucesso!")
                 setOpen(true);
+                navigate('/notaveis');
         }
         });        
     };
@@ -128,7 +135,6 @@ export const DetalheDeNotaveis: React.FC = () => {
             NotaveisService.getById(Number(id))
             .then((result) => {
                 if (result instanceof Error) {
-                    alert(result.message);
                     navigate('/notaveis');
                 } else {
                     setNome(result.nome);

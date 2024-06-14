@@ -5,7 +5,7 @@
       "nomeCompleto": "Valeria Lourenco",
       "email": "valeria@hotmail.com",
       "idade": 60,
-      "notavelId": 11
+      "notavelId": 1
     },
     {
       "id": 5,
@@ -19,84 +19,14 @@
       "nomeCompleto": "Elias Lourenco cesar",
       "email": "elias@cccc.com.br",
       "idade": "65",
-      "notavelId": 3
+      "notavelId": 1
     },
     {
       "id": 14,
       "nomeCompleto": "Maria Clara Heringer",
       "email": "Maria@hotmail.com",
       "idade": 25,
-      "notavelId": "Edson Arantes do Nascimento"
-    },
-    {
-      "id": 15,
-      "nomeCompleto": "aaaaaaaaaaaaa",
-      "email": "pedro@rgb.com.br",
-      "idade": "10",
       "notavelId": 1
-    },
-    {
-      "id": 16,
-      "nomeCompleto": "aaaaabbbccc",
-      "email": "abc@hot.com",
-      "idade": "123",
-      "notavelId": 2
-    },
-    {
-      "id": 17,
-      "nomeCompleto": "teste 012",
-      "email": "teste@email.com",
-      "idade": "233",
-      "notavelId": 1
-    },
-    {
-      "id": 18,
-      "nomeCompleto": "teste 02",
-      "email": "pedro@xxx.com",
-      "idade": "12",
-      "notavelId": 2
-    },
-    {
-      "id": 19,
-      "nomeCompleto": "PEDRO BRUNO R. LOURENCO",
-      "email": "pedrobrunorl@hotmail.com",
-      "idade": "58",
-      "notavelId": 1
-    },
-    {
-      "id": 20,
-      "nomeCompleto": "PEDRO DA SILVA",
-      "email": "PEDRODASILVA@HOTMAIL.COM",
-      "idade": "14",
-      "notavelId": 1
-    },
-    {
-      "id": 21,
-      "nomeCompleto": "PETRO BRUNO",
-      "email": "PEDROB@HOTMAIL.COM",
-      "idade": "122",
-      "notavelId": 11
-    },
-    {
-      "id": 22,
-      "nomeCompleto": "EDU PITOMBO",
-      "email": "pedro@xxx.com.br",
-      "idade": "55",
-      "notavelId": 2
-    },
-    {
-      "id": 23,
-      "nomeCompleto": "CARLOS ALBERTO",
-      "email": "pedroxxxx@xxx.com",
-      "idade": "234",
-      "notavelId": 10
-    },
-    {
-      "id": 24,
-      "nomeCompleto": "teste 3333",
-      "email": "teste333@xxx.com.br",
-      "idade": "12",
-      "notavelId": 3
     }
   ],
   "notaveis": [
@@ -113,62 +43,6 @@
       "apelido": "Pelé",
       "atividade": "Jogador de Futebol",
       "descricao": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-    },
-    {
-      "id": 3,
-      "nome": "Carlos Alberto de Nobrega",
-      "apelido": "CazAlberto",
-      "atividade": "Comediante",
-      "descricao": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-    },
-    {
-      "id": 4,
-      "nome": "aaaaaaaaaaaa",
-      "apelido": "aaaaaaaaaaaaa",
-      "atividade": "aaaaaaaaaaaaa",
-      "descricao": "aaaaaaaaaaaaaaaaa"
-    },
-    {
-      "id": 6,
-      "nome": "ccccccccccccccc",
-      "apelido": "ccccccccccccc",
-      "atividade": "ccccccccccccccccc",
-      "descricao": "cccccccccccccccc"
-    },
-    {
-      "id": 7,
-      "nome": "dddddddddddddddddddd",
-      "apelido": "dddddddddddddddddd",
-      "atividade": "dddddddddddddddd",
-      "descricao": "ddddddddddddd"
-    },
-    {
-      "id": 8,
-      "nome": "eeeeeeeeeeeee",
-      "apelido": "eeeeeeeeeeeee",
-      "atividade": "eeeeeeeeeeee",
-      "descricao": "eeeeeeeeeeeee"
-    },
-    {
-      "id": 9,
-      "nome": "fffffffffffffffffff",
-      "apelido": "ffffffffffffffff",
-      "atividade": "fffffffffffff",
-      "descricao": "fffffffffffffffff"
-    },
-    {
-      "id": 10,
-      "nome": "ggggggggggggggg",
-      "apelido": "ggggggggggggggg",
-      "atividade": "ggggggggggggg",
-      "descricao": "gggggggggggggg"
-    },
-    {
-      "id": 11,
-      "nome": "JULIA HERINGER",
-      "apelido": "JUJU",
-      "atividade": "INTERNACIONALISTA",
-      "descricao": "AAAAAAAAAAAAAAAAAAAAAA"
     }
   ]
 }
