@@ -250,6 +250,8 @@ export const DetalheDeNotaveis: React.FC = () => {
                         label="Descrição"
                         type="text"
                         variant="outlined"
+                        multiline
+                        rows={3}
                         InputLabelProps={{ shrink: true }}
                         {...register("descricao", {
                             required: "Descrição é obrigatória",

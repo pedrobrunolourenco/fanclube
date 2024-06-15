@@ -120,6 +120,7 @@ export const DetalheDeAdmiradores: React.FC = () => {
     const handleSalvar = (data: IDetalheAdmirador) => {
         const selectedOption = opcoes.find(opcao => opcao.id === selectedId);
         data.notavelId = selectedOption?.id;
+        
         // incluir
         if (id === "novo") {
             AdmiradoresService.create(data).then(result => {
@@ -282,18 +283,18 @@ export const DetalheDeAdmiradores: React.FC = () => {
                                 isOptionEqualToValue={(option, value) => option.id === value.id}
                                 onChange={(event, newValue) => {
                                     setSelectedId(newValue?.id);
-                                    field.onChange(newValue?.id || 0); // Update form state here
-                                    setValue('notavelId', newValue?.id || 0); // Set form value
+                                    field.onChange(newValue?.id || 0); 
+                                    setValue('notavelId', newValue?.id || 0); 
                                 }}
 
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
-                                        label="Meu fã Número 1"
+                                        label="Fã Número 1"
                                         variant="outlined"
                                         InputLabelProps={{ shrink: true }}
                                         {...register("notavelId", {
-                                            required: "Seu fã numero 1 é obrigatório"
+                                            required: "Fã número 1 é obrigatório"
                                         })}
                                         error={!!errors.notavelId}
                                         helperText={errors.notavelId?.message}

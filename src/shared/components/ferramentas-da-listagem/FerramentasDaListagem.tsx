@@ -34,10 +34,10 @@ export const FerramentasDaListagem: React.FC<IFerramentasDaListagemProps> = ({
 
         { mostrarInputBusca && (
             <TextField 
-            placeholder={Enviroment.INPUT_DE_BUSCA}
-            value={textoDaBusca}
-            onChange={(e) => aoMudarTextoDeBusca?.(e.target.value)}
-            size="small"
+               placeholder={Enviroment.INPUT_DE_BUSCA}
+               value={textoDaBusca}
+               onChange={(e) => aoMudarTextoDeBusca?.(e.target.value)}
+               size="small"
             />
         )}
 
@@ -51,7 +51,8 @@ export const FerramentasDaListagem: React.FC<IFerramentasDaListagemProps> = ({
                    onClick={aoClicarEmNovo}
                    endIcon={<Icon>add</Icon>}
                 >
-                {textoBotaoNovo}</Button>
+                   {textoBotaoNovo}
+                </Button>
             )}
           </Box>
        </Box>

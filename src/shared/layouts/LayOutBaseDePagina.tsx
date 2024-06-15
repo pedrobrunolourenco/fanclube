@@ -31,6 +31,7 @@ export const LayOutBaseDePagina: React.FC<React.PropsWithChildren<ILayOutBaseDeP
                    whiteSpace="nowrap"
                    textOverflow="ellipses"
                >
+                   
                    { titulo }
                </Typography>
            </Box>

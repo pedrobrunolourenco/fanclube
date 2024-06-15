@@ -56,7 +56,7 @@ export const ListagemDeAdmiradores: React.FC = () => {
         });        
     };
 
-    const { debounce } = useDebounce(3000, true);
+    const { debounce } = useDebounce(1000, true);
 
     const [rows, setRows] = useState<IListagemAdmirador[]>([]);
     const [totalCount, setTotalCount] = useState(0);
@@ -85,7 +85,6 @@ export const ListagemDeAdmiradores: React.FC = () => {
                 if (result instanceof Error) {
                     alert(result.message);
                 } else {
-                    console.log(result);
                     setTotalCount(result.totalCount);
                     setRows(result.data);
                 }

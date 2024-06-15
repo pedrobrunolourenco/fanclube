@@ -1,4 +1,3 @@
-import { Height } from "@mui/icons-material";
 import { Box, Button, Divider, Icon, Paper, Skeleton, Typography, useMediaQuery, useTheme } from "@mui/material"
 
 interface IFerramentasDeDetalheProps{
@@ -29,7 +28,7 @@ export const FerramentasDeDetalhe: React.FC<IFerramentasDeDetalheProps> = ({
     mostrarBotaoVoltarCarregando = false,
     mostrarBotaoApagarCarregando = false,
     mostrarBotaoSalvarCarregando = false,
- 
+
     aoClicarEmVoltar,
     aoClicarEmApagar,
     aoClicarEmSalvar,

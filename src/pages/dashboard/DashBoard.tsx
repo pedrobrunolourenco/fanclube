@@ -50,10 +50,9 @@ export const DashBoard: React.FC = () => {
 
     return(
         <LayOutBaseDePagina 
-            titulo="Página Inicial" 
-            barraDeFerramentas={<FerramentasDaListagem mostrarBotaoNovo={false} />}
+            titulo="DASHBOARD" 
+            barraDeFerramentas={<FerramentasDaListagem mostrarBotaoNovo={false}  />}
         >
-
             <Box width='100%' display='flex'>
                 <Grid container margin={2}>
                     <Grid item container spacing={2}>
