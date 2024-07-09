@@ -4,6 +4,7 @@ import { LayOutBaseDePagina } from "../../shared/layouts";
 import { useEffect, useState } from "react";
 import { NotaveisService } from "../../shared/services/api/notaveis/NotaveisService";
 import { AdmiradoresService } from "../../shared/services/api/admiradores/AdmiradoresService";
+import { useNavigate } from "react-router";
 
 export const DashBoard: React.FC = () => {
 
@@ -11,6 +12,10 @@ export const DashBoard: React.FC = () => {
     const [isLoadingAdmiradores, setIsLoadinAdmiradores] = useState(true);
     const [totalCountNotaveis, setTotalCountNotaveis] = useState(0);
     const [totalCountAdmiradores, setTotalCountAdmiradores] = useState(0);
+
+    const navigate = useNavigate();
+
+
   
     useEffect(() => {
       setIsLoadingNotaveis(true);
@@ -38,15 +43,6 @@ export const DashBoard: React.FC = () => {
         });
     }, []);
   
-  
-
-
-
-
-
-
-
-
 
     return(
         <LayOutBaseDePagina 
@@ -64,7 +60,7 @@ export const DashBoard: React.FC = () => {
                                         Total de Admiradores
                                     </Typography>
 
-                                    <Box padding={6} display="flex" justifyContent="center" alignItems="center">
+                                    <Box sx={{ cursor: 'pointer' }} padding={6} display="flex" justifyContent="center" alignItems="center" onClick={ () => navigate(`/admiradores`)}>
                                         {!isLoadingAdmiradores && (
                                             <Typography variant='h1'>
                                                 {totalCountAdmiradores}
@@ -89,7 +85,7 @@ export const DashBoard: React.FC = () => {
                                         Total de Notáveis
                                     </Typography>
 
-                                    <Box padding={6} display="flex" justifyContent="center" alignItems="center">
+                                    <Box  sx={{ cursor: 'pointer' }}  padding={6} display="flex" justifyContent="center" alignItems="center" onClick={ () => navigate(`/notaveis`)} >
                                          {!isLoadingNotaveis && (
                                             <Typography variant='h1'>
                                                 {totalCountNotaveis}
