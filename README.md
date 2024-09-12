@@ -42,3 +42,9 @@ Acessar `https://www.figma.com/design/mwKlgi8UObKFA4sfkKjSbU/MVP-PUC?node-id=0-1
    ```
 3. Este comando habilitará o projeto em `localhost:3000`.
 4. Acessar `http://localhost:3000` no seu navegador.
+
+
+docker build -t fanclube .
+docker run -d -p 8080:80 fanclube
+http://localhost:8080
+
