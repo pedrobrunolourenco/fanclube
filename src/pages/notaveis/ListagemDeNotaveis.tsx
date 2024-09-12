@@ -3,7 +3,6 @@ import { useNavigate, useSearchParams } from "react-router-dom"
 import { FerramentasDaListagem } from "../../shared/components"
 import { LayOutBaseDePagina } from "../../shared/layouts"
 import { useEffect, useMemo, useState } from "react";
-import { useDebounce } from "../../shared/hooks";
 import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Icon, IconButton, LinearProgress, Pagination, Paper, Slide, Snackbar, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow } from "@mui/material";
 import { Enviroment } from "../../shared/environment";
 import { IListagemNotavel, NotaveisService } from "../../shared/services/api/notaveis/NotaveisService";
@@ -61,8 +60,6 @@ export const ListagemDeNotaveis: React.FC = () => {
 
 
 
-    const {debounce} = useDebounce(1000, true);
-
     const [rows, setRows] = useState<IListagemNotavel[]>([]);
     const [totalCount, setTotalCount] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
@@ -83,21 +80,24 @@ export const ListagemDeNotaveis: React.FC = () => {
         });
     }
 
-    useEffect( () => {
+    useEffect(() => {
         setIsLoading(true);
-        debounce(() => {
-            NotaveisService.getAll(pagina, busca)
-            .then( (result) => {
-                setIsLoading(false);
-                if( result instanceof Error){
-                    alert(result.message);
-                } else {
-                    setTotalCount(result.totalCount);
-                    setRows(result.data);
-                }
-            });
-        });
-    }, [busca, pagina]);
+        NotaveisService.getAll(pagina,busca)
+          .then((result) => {
+            setIsLoading(false);
+            if (result instanceof Error) {
+              alert(result.message);
+            } else {
+              
+              if (Array.isArray(result.data)) {
+                setTotalCount(result.totalCount || 0);
+                setRows(result.data);  
+              } else {
+                console.error("Dados inesperados: ", result);
+              }
+            }
+          });
+      }, [busca, pagina]);
 
     return(
         <LayOutBaseDePagina 

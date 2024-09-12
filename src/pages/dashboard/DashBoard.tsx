@@ -17,31 +17,29 @@ export const DashBoard: React.FC = () => {
 
 
   
-    useEffect(() => {
-      setIsLoadingNotaveis(true);
-      setIsLoadinAdmiradores(true);
+    // useEffect(() => {
+    //   setIsLoadingNotaveis(true);
+    //   setIsLoadinAdmiradores(true);
   
-      NotaveisService.getAll(1)
-        .then((result) => {
-          setIsLoadingNotaveis(false);
+    //   NotaveisService.getAll(0)
+    //     .then((result) => {
+    //       setIsLoadingNotaveis(false);
   
-          if (result instanceof Error) {
-            alert(result.message);
-          } else {
-            setTotalCountNotaveis(result.totalCount);
-          }
-        });
-      AdmiradoresService.getAll(1)
-        .then((result) => {
-            setIsLoadinAdmiradores(false);
+    //       if (result instanceof Error) {
+    //       } else {
+    //         // setTotalCountNotaveis(result.totalCount);
+    //       }
+    //     });
+    //   AdmiradoresService.getAll(1)
+    //     .then((result) => {
+    //         setIsLoadinAdmiradores(false);
   
-          if (result instanceof Error) {
-            alert(result.message);
-          } else {
-            setTotalCountAdmiradores(result.totalCount);
-          }
-        });
-    }, []);
+    //       if (result instanceof Error) {
+    //       } else {
+    //         setTotalCountAdmiradores(result.totalCount);
+    //       }
+    //     });
+    // }, []);
   
 
     return(

@@ -2,7 +2,6 @@ import { Enviroment } from "../../../environment";
 import { Api } from "../axios-config";
 
 
-
 export interface IListagemNotavel {
     id: number;
     nome: string;
@@ -19,27 +18,37 @@ export interface IDetalheNotavel {
     descricao: string;
 }
 
+export interface IRequestGet {
+    offset: string
+    limit: string
+}
+
+
 type TNotavelComTotalCount = {
     data: IListagemNotavel[];
     totalCount: number;
 }
 
-const getAll = async (page = 1, filter = ''): Promise<TNotavelComTotalCount | Error> => {
-    try {
-        const urlRelativa = `/notaveis?_page=${page}&_limit=${Enviroment.LIMITE_DE_LINHAS}&nome_like=${filter}`;
+const urlBase = Enviroment.URL_NOTAVEL;
 
-        const { data, headers } = await Api.get(urlRelativa);
-        
-        if (data) {
+const getAll = async (page = 0, busca=''): Promise<TNotavelComTotalCount | Error> => {
+    try {
+        page = page - 1;
+        if(page > 0) page = page + (Enviroment.LIMITE_DE_LINHAS - 1);
+
+        const urlRelativa = urlBase + `/getall?offset=${page}&limit=${Enviroment.LIMITE_DE_LINHAS}&busca=${busca}`;
+
+        const { data } = await Api.get(urlRelativa);
+
+        if (data && Array.isArray(data.data)) {
             return {
-                data,
-                totalCount: Number(headers['x-total-count'] || Enviroment.LIMITE_DE_LINHAS),
+                data: data.data, 
+                totalCount: data.totalCount
             };
         }
 
-        return new Error('Erro ao listar notáveis.');
+        return new Error('Erro ao listar os notáveis.');
     } catch (error) {
-        console.log(error);
         return new Error((error as { message: string }).message || 'Erro ao listar notáveis.');
     }
 };
