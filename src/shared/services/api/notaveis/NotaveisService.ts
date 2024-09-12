@@ -1,3 +1,4 @@
+import axios from "axios";
 import { Enviroment } from "../../../environment";
 import { Api } from "../axios-config";
 
@@ -18,6 +19,14 @@ export interface IDetalheNotavel {
     descricao: string;
 }
 
+export interface ICreateNotavel {
+    nome: string;
+    apelido: string;
+    atividade: string;
+    descricao: string;
+}
+
+
 export interface IRequestGet {
     offset: string
     limit: string
@@ -29,12 +38,103 @@ type TNotavelComTotalCount = {
     totalCount: number;
 }
 
+export interface ICreateNotavel {
+    nome: string;
+    apelido: string;
+    atividade: string;
+    descricao: string;
+}
+
+
+export interface IRetornoNotavel {
+    apelido: string;
+    atividade: string;
+    descricao: string;
+    id: number;
+    nome: string;
+    sucesso: boolean;
+}
+
+
+
 const urlBase = Enviroment.URL_NOTAVEL;
+
+
+const updateById = async (notavel: IDetalheNotavel): Promise<IDetalheNotavel> => {
+    try {
+        const urlRelativa = `${urlBase}/update`;
+
+        const response = await Api.put<IDetalheNotavel>(
+            urlRelativa, 
+            notavel,
+            { headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' } }
+        );
+
+        if (response.data) {
+            return response.data;
+        } else {
+            throw new Error('Resposta vazia da API ao criar o notável.');
+        }
+    } catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
+            console.error('Erro na requisição:', error.response.data);
+            throw new Error(`Erro ao criar o notável: ${error.response.data}`);
+        } else {
+            throw new Error((error as Error).message || 'Erro ao criar o notável.');
+        }
+    }
+};
+
+
+const getById = async (id: number): Promise<IDetalheNotavel| Error> => {
+    try {
+        const urlRelativa = urlBase + `/getbyid?id=${id}`;
+        const { data } = await Api.get(urlRelativa);
+        if (data) {
+           return data;
+        }
+        return new Error('Notável não localizado.');
+    } catch (error) {
+        return new Error((error as { message: string }).message || 'Erro procurar notável.');
+    }
+};
+
+
+const create = async (notavel: IDetalheNotavel): Promise<IDetalheNotavel> => {
+    try {
+        const urlRelativa = `${urlBase}/create`;
+
+        const createNotavel: ICreateNotavel = {
+            nome: notavel.nome || '',
+            apelido: notavel.apelido || '',
+            atividade: notavel.atividade || '',
+            descricao: notavel.descricao || ''
+        };
+
+        const response = await Api.post<IRetornoNotavel>(
+            urlRelativa, 
+            createNotavel,
+            { headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' } }
+        );
+
+        if (response.data) {
+            return response.data;
+        } else {
+            throw new Error('Resposta vazia da API ao criar o notável.');
+        }
+    } catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
+            console.error('Erro na requisição:', error.response.data);
+            throw new Error(`Erro ao criar o notável: ${error.response.data}`);
+        } else {
+            throw new Error((error as Error).message || 'Erro ao criar o notável.');
+        }
+    }
+};
 
 const getAll = async (page = 0, busca=''): Promise<TNotavelComTotalCount | Error> => {
     try {
-        page = page - 1;
-        if(page > 0) page = page + (Enviroment.LIMITE_DE_LINHAS - 1);
+        page = (page - 1) * Enviroment.LIMITE_DE_LINHAS       
 
         const urlRelativa = urlBase + `/getall?offset=${page}&limit=${Enviroment.LIMITE_DE_LINHAS}&busca=${busca}`;
 
@@ -73,50 +173,16 @@ const getAllSemFiltro = async (): Promise<TNotavelComTotalCount | Error> => {
     }
 };
 
-
-
-
-const getById = async (id: number): Promise<IDetalheNotavel| Error> => {
-    try {
-        const { data } = await Api.get(`/notaveis/${id}`);
-        if (data) {
-            return data;
-        }
-        return new Error('Erro ao consultar o notável.');
-    } catch (error) {
-        console.log(error);
-        return new Error((error as { message: string }).message || 'Erro ao consultar o notável.');
-    }
-};
-
-const create = async (notavel: Omit<IDetalheNotavel, 'id'>): Promise<number | Error> => {
-    try {
-        const { data } = await Api.post<IDetalheNotavel>('/notaveis/', notavel);
-        if (data) {
-            return data.id;
-        }
-        return new Error('Erro ao criar o notável.');
-    } catch (error) {
-        console.log(error);
-        return new Error((error as { message: string }).message || 'Erro ao criar o notável.');
-    }
-};
-
-const updateById = async (id: number, notavel: IDetalheNotavel): Promise<void | Error> => {
-    try {
-        await Api.put(`/notaveis/${id}`, notavel);
-    } catch (error) {
-        console.log(error);
-        return new Error((error as { message: string }).message || 'Erro ao alterar o notável.');
-    }
-};
-
 const deleteById = async (id: number): Promise<void | Error> => {
     try {
-        await Api.delete(`/notaveis/${id}`);
+        const urlRelativa = urlBase + `/removebyid?id=${id}`;
+        const { data } = await Api.delete(urlRelativa);
+        if (data) {
+           return data;
+        }
+        return new Error('Notável não localizado.');
     } catch (error) {
-        console.log(error);
-        return new Error((error as { message: string }).message || 'Erro ao excluir o notavel.');
+        return new Error((error as { message: string }).message || 'Erro procurar notável.');
     }
 };
 

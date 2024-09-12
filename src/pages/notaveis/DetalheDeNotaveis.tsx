@@ -89,10 +89,7 @@ export const DetalheDeNotaveis: React.FC = () => {
         });
     }
 
-
-
     const handleSalvar = (data: IDetalheNotavel) => {
-        
         // incluir
         if(id === "novo")
         {
@@ -113,8 +110,7 @@ export const DetalheDeNotaveis: React.FC = () => {
         // alterar
         if(id !== "novo")
         {
-
-            NotaveisService.updateById(data.id, data).then(result => {
+            NotaveisService.updateById(data).then(result => {
                 if (result instanceof Error) {
                     setTipoMsg("error");
                     setMsg("Erro ao atualizar um notável")
@@ -122,6 +118,7 @@ export const DetalheDeNotaveis: React.FC = () => {
 
                 } else {
                     setTipoMsg("success");
+                    setNome(result.nome);
                     setMsg("Notável atualizado com sucesso!")
                     setOpen(true);
                 }
