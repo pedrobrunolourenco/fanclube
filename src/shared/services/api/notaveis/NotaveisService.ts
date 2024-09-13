@@ -38,14 +38,6 @@ type TNotavelComTotalCount = {
     totalCount: number;
 }
 
-export interface ICreateNotavel {
-    nome: string;
-    apelido: string;
-    atividade: string;
-    descricao: string;
-}
-
-
 export interface IRetornoNotavel {
     apelido: string;
     atividade: string;
@@ -73,18 +65,17 @@ const updateById = async (notavel: IDetalheNotavel): Promise<IDetalheNotavel> =>
         if (response.data) {
             return response.data;
         } else {
-            throw new Error('Resposta vazia da API ao criar o notável.');
+            throw new Error('Resposta vazia da API ao alterar o notável.');
         }
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
             console.error('Erro na requisição:', error.response.data);
-            throw new Error(`Erro ao criar o notável: ${error.response.data}`);
+            throw new Error(`Erro ao alterar o notável: ${error.response.data}`);
         } else {
-            throw new Error((error as Error).message || 'Erro ao criar o notável.');
+            throw new Error((error as Error).message || 'Erro ao remover o notável.');
         }
     }
 };
-
 
 const getById = async (id: number): Promise<IDetalheNotavel| Error> => {
     try {

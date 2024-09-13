@@ -197,7 +197,7 @@ export const ListagemDeNotaveis: React.FC = () => {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle>
-                    {"Confirma a exclusão do registro?"}
+                    {"Confirma a exclusão do notável?"}
                 </DialogTitle>
                 <DialogContent>
                 <DialogContentText>

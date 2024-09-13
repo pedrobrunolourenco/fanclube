@@ -3,11 +3,12 @@ import { LayOutBaseDePagina } from "../../shared/layouts";
 import { FerramentasDeDetalhe } from "../../shared/components";
 import { useEffect, useMemo, useState } from "react";
 import { AdmiradoresService, IDetalheAdmirador } from "../../shared/services/api/admiradores/AdmiradoresService";
-import { TextField, Box, Stack, Snackbar, Slide, Alert, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Autocomplete, CircularProgress, Paper } from "@mui/material";
+import { TextField, Box, Stack, Snackbar, Slide, Alert, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Autocomplete, CircularProgress, Paper, Icon, Typography } from "@mui/material";
 import { useForm, Controller } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
 import { useDebounce } from "../../shared/hooks";
 import { NotaveisService } from "../../shared/services/api/notaveis/NotaveisService";
+
 
 type TAutoCompleteOption = {
     id: number;
@@ -28,7 +29,7 @@ export const DetalheDeAdmiradores: React.FC = () => {
     useEffect(() => {
         setIsLoading(true);
         debounce(() => {
-            NotaveisService.getAllSemFiltro()
+            NotaveisService.getAll(0,busca)
                 .then((result) => {
                     setIsLoading(false);
                     if (result instanceof Error) {
@@ -97,10 +98,16 @@ export const DetalheDeAdmiradores: React.FC = () => {
     const { register, handleSubmit, formState, control, setValue } = useForm<IDetalheAdmirador>({
         defaultValues: {
             id: id === 'novo' ? undefined : Number(id),
-            nomeCompleto: '',
+            bairro: '',
+            cep: '',
+            cidade: '',
+            complemento: '',
             email: '',
+            endereco: '',
             idade: 0,
-            notavelId: 0
+            nome: '',
+            notavelId: 0 || undefined,
+            uf: ''
         }
     });
 
@@ -138,7 +145,7 @@ export const DetalheDeAdmiradores: React.FC = () => {
 
         // alterar
         if (id !== "novo") {
-            AdmiradoresService.updateById(data.id, data).then(result => {
+            AdmiradoresService.updateById(data).then(result => {
                 if (result instanceof Error) {
                     setTipoMsg("error");
                     setMsg("Erro ao atualizar um admirador")
@@ -159,7 +166,7 @@ export const DetalheDeAdmiradores: React.FC = () => {
                     if (result instanceof Error) {
                         navigate('/admiradores');
                     } else {
-                        setNome(result.nomeCompleto);
+                        setNome(result.nome);
                         atribuirForm(result);
                     }
                 });
@@ -171,19 +178,32 @@ export const DetalheDeAdmiradores: React.FC = () => {
     const atribuirForm = (data: IDetalheAdmirador) => {
         setSelectedId(data.notavelId);
         setValue('id', data.id);
-        setValue('nomeCompleto', data.nomeCompleto);
+        setValue('nome', data.nome);
         setValue('email', data.email);
         setValue('idade', data.idade);
         setValue('notavelId', data.notavelId);
+        setValue('endereco', data.endereco);
+        setValue('bairro', data.bairro);
+        setValue('cidade', data.cidade);
+        setValue('uf', data.uf);
+        setValue('cep', data.cep);
+        setValue('complemento', data.complemento);
 
     };
 
     const limparForm = () => {
         setValue('id', 0);
-        setValue('nomeCompleto', '');
+        setValue('nome', '');
         setValue('email', '');
         setValue('idade', 0);
         setValue('notavelId', 0);
+        setValue('endereco', '');
+        setValue('bairro', '');
+        setValue('cidade', '');
+        setValue('uf', '');
+        setValue('cep', '');
+        setValue('complemento', '');
+
         setSelectedId(undefined);
     };
 
@@ -216,16 +236,17 @@ export const DetalheDeAdmiradores: React.FC = () => {
                         type="text"
                         variant="outlined"
                         InputLabelProps={{ shrink: true }}
-                        {...register("nomeCompleto", {
+                        {...register("nome", {
                             required: "Nome é obrigatório",
                             minLength: {
                                 value: 5,
                                 message: "O nome deve ter pelo menos 5 letras"
                             }
                         })}
-                        error={!!errors.nomeCompleto}
-                        helperText={errors.nomeCompleto?.message}
+                        error={!!errors.nome}
+                        helperText={errors.nome?.message}
                     />
+
                     <TextField
                         autoComplete='off'
                         size="small"
@@ -244,6 +265,7 @@ export const DetalheDeAdmiradores: React.FC = () => {
                         error={!!errors.email}
                         helperText={errors.email?.message}
                     />
+
                     <Box width={300}>
                         <TextField
                             autoComplete='off'
@@ -273,7 +295,7 @@ export const DetalheDeAdmiradores: React.FC = () => {
                                 closeText="Fechar"
                                 noOptionsText="Sem Opções"
                                 loadingText="Carregando..."
-                                disablePortal
+                                disablePortal={true}
                                 value={autoCompleteSelectedOption}
                                 loading={isLoading}
                                 popupIcon={isLoading ? <CircularProgress size={28} /> : undefined}
@@ -304,6 +326,128 @@ export const DetalheDeAdmiradores: React.FC = () => {
                             />
                         )}
                     />
+
+
+                    <Box width={600}>
+                        <TextField
+                            autoComplete='off'
+                            size="small"
+                            label="CEP"
+                            type="text"
+                            variant="outlined"
+                            InputLabelProps={{ shrink: true }}
+                            {...register("cep", {
+                                required: "CEP é obrigatório",
+                                minLength: {
+                                    value: 5,
+                                    message: "O CEP deve ter 5 dígitos"
+                                }
+                                })}
+                            error={!!errors.cep}
+                            helperText={errors.cep?.message}
+                        />
+
+                     <Button
+                        variant="contained"
+                        color="primary"
+                        disableElevation
+                        // onClick={}
+                        endIcon={<Icon>email</Icon>}
+                        sx={{ ml: 2 }}
+                      >
+                        <Typography variant="button" whiteSpace="nowrap" textOverflow="ellipsis" overflow="hidden">
+                            Atualizar Endereço Pelo CEP
+                        </Typography>
+                     </Button>
+
+                    </Box>
+
+                    <TextField
+                        autoComplete='off'
+                        size="small"
+                        label="Endereço"
+                        type="text"
+                        variant="outlined"
+                        InputLabelProps={{ shrink: true }}
+                        {...register("endereco", {
+                            required: "Endereço é obrigatório",
+                            minLength: {
+                                value: 5,
+                                message: "O endereço deve ter pelo menos 5 letras"
+                            }
+                        })}
+                        error={!!errors.endereco}
+                        helperText={errors.endereco?.message}
+                    />
+
+                     <TextField
+                        autoComplete='off'
+                        size="small"
+                        label="Complemento"
+                        type="text"
+                        variant="outlined"
+                        InputLabelProps={{ shrink: true }}
+                        {...register("complemento", {
+                        })}
+                    />
+
+                     <TextField
+                        autoComplete='off'
+                        size="small"
+                        label="Bairro"
+                        type="text"
+                        variant="outlined"
+                        InputLabelProps={{ shrink: true }}
+                        {...register("bairro", {
+                            required: "Bairro é obrigatório",
+                            minLength: {
+                                value: 2,
+                                message: "O endereço deve ter pelo menos 2 letras"
+                            }
+                        })}
+                        error={!!errors.bairro}
+                        helperText={errors.bairro?.message}
+                    />
+
+                    <TextField
+                        autoComplete='off'
+                        size="small"
+                        label="Cidade"
+                        type="text"
+                        variant="outlined"
+                        InputLabelProps={{ shrink: true }}
+                        {...register("cidade", {
+                            required: "Cidade é obrigatória",
+                            minLength: {
+                                value: 2,
+                                message: "A cidade deve ter pelo menos 2 letras"
+                            }
+                        })}
+                        error={!!errors.bairro}
+                        helperText={errors.bairro?.message}
+                    />
+
+                    <Box width={200}>
+                        <TextField
+                            autoComplete='off'
+                            size="small"
+                            label="UF"
+                            type="text"
+                            variant="outlined"
+                            InputLabelProps={{ shrink: true }}
+                            {...register("uf", {
+                                required: "UF é obrigatória",
+                                minLength: {
+                                    value: 2,
+                                    message: "A UF deve ter 2 dígitos"
+                                }
+                                })}
+                            error={!!errors.uf}
+                            helperText={errors.uf?.message}
+                        />
+                    </Box>
+
+
                 </Stack>
                 </Box>
             </form>

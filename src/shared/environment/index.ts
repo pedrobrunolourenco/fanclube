@@ -22,6 +22,6 @@ export const Enviroment = {
     */
    URL_BASE: 'http://localhost:3333',
    URL_NOTAVEL: 'http://localhost:8181',
-   URL_ADMIRADOR: 'http://localhost:3333'
+   URL_ADMIRADOR: 'http://localhost:8383'
   
 };

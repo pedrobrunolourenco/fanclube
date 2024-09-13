@@ -79,18 +79,22 @@ export const ListagemDeAdmiradores: React.FC = () => {
 
     useEffect(() => {
         setIsLoading(true);
-        debounce(() => {
-            AdmiradoresService.getAll(pagina, busca).then((result) => {
-                setIsLoading(false);
-                if (result instanceof Error) {
-                    alert(result.message);
-                } else {
-                    setTotalCount(result.totalCount);
-                    setRows(result.data);
-                }
-            });
-        });
-    }, [busca, pagina, debounce]);
+        AdmiradoresService.getAll(pagina,busca)
+          .then((result) => {
+            setIsLoading(false);
+            if (result instanceof Error) {
+              alert(result.message);
+            } else {
+              
+              if (Array.isArray(result.data)) {
+                setTotalCount(result.totalCount || 0);
+                setRows(result.data);  
+              } else {
+                console.error("Dados inesperados: ", result);
+              }
+            }
+          });
+      }, [busca, pagina]);
 
     return (
         <LayOutBaseDePagina
@@ -110,8 +114,10 @@ export const ListagemDeAdmiradores: React.FC = () => {
                     <TableHead>
                         <TableRow>
                             <TableCell>Ações</TableCell>
-                            <TableCell>Nome Completo</TableCell>
+                            <TableCell>Nome</TableCell>
                             <TableCell>E-Mail</TableCell>
+                            <TableCell>Idade</TableCell>
+                            <TableCell>Estado</TableCell>
                         </TableRow>
                     </TableHead>
 
@@ -126,8 +132,10 @@ export const ListagemDeAdmiradores: React.FC = () => {
                                         <Icon>edit</Icon>
                                     </IconButton>
                                 </TableCell>
-                                <TableCell>{row.nomeCompleto}</TableCell>
+                                <TableCell>{row.nome}</TableCell>
                                 <TableCell>{row.email}</TableCell>
+                                <TableCell>{row.idade}</TableCell>
+                                <TableCell>{row.uf}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
@@ -182,7 +190,7 @@ export const ListagemDeAdmiradores: React.FC = () => {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle>
-                    {"Confirma a exclusão do registro?"}
+                    {"Confirma a exclusão do admirador?"}
                 </DialogTitle>
                 <DialogContent>
                 <DialogContentText>

@@ -52,7 +52,7 @@ export const FerramentasDeDetalhe: React.FC<IFerramentasDeDetalheProps> = ({
 
                 {(mostrarBotaoSalvar && !mostrarBotaoSalvarCarregando) &&
                     (
-                        <Button
+                      <Button
                         variant="contained"
                         color="primary"
                         disableElevation
