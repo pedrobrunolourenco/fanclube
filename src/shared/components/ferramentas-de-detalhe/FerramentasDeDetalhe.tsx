@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Icon, Paper, Skeleton, Typography, useMediaQuery, useTheme } from "@mui/material"
+import { Box, Button, Divider, Icon, Paper, Skeleton, Typography, useTheme } from "@mui/material"
 
 interface IFerramentasDeDetalheProps{
    textoBotaoNovo?: string;
@@ -35,8 +35,6 @@ export const FerramentasDeDetalhe: React.FC<IFerramentasDeDetalheProps> = ({
  
 }) => {
     const theme = useTheme();
-    const smDown = useMediaQuery(theme.breakpoints.down('sm'));
-    const mdDown = useMediaQuery(theme.breakpoints.down('md'));    
 
     return(
         <Box

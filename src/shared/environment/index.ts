@@ -18,9 +18,9 @@ export const Enviroment = {
    LISTAGEM_VAZIA: 'Nenhum registro encontrado...',
 
    /**
-    *  URL Base de consulta a API dessa aplicação
+    *  URL Base de consultas as APIs dessa aplicação
     */
-   URL_BASE: 'http://localhost:3333',
+   URL_CEP: 'https://viacep.com.br/ws',
    URL_NOTAVEL: 'http://localhost:8181',
    URL_ADMIRADOR: 'http://localhost:8383'
   

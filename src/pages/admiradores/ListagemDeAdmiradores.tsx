@@ -3,7 +3,6 @@ import { FerramentasDaListagem } from "../../shared/components";
 import { LayOutBaseDePagina } from "../../shared/layouts";
 import { useEffect, useMemo, useState } from "react";
 import { AdmiradoresService, IListagemAdmirador } from "../../shared/services/api/admiradores/AdmiradoresService";
-import { useDebounce } from "../../shared/hooks";
 import { Icon, IconButton, LinearProgress, Pagination, Paper, Slide, Snackbar, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow, Alert, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from "@mui/material";
 import { Enviroment } from "../../shared/environment";
 
@@ -55,8 +54,6 @@ export const ListagemDeAdmiradores: React.FC = () => {
         }
         });        
     };
-
-    const { debounce } = useDebounce(1000, true);
 
     const [rows, setRows] = useState<IListagemAdmirador[]>([]);
     const [totalCount, setTotalCount] = useState(0);

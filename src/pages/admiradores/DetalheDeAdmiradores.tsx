@@ -8,6 +8,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
 import { useDebounce } from "../../shared/hooks";
 import { NotaveisService } from "../../shared/services/api/notaveis/NotaveisService";
+import { ExternasService } from "../../shared/services/api/externas/ExternasService";
 
 
 type TAutoCompleteOption = {
@@ -55,13 +56,15 @@ export const DetalheDeAdmiradores: React.FC = () => {
 
     const [msg, setMsg] = useState("");
     const [tipoMsg, setTipoMsg] = useState<any>("warning");
+    const [limpa, setLimpa] = useState(false);
+
 
     const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === "clickaway") {
             return;
         }
         if (id === "novo") {
-            limparForm();
+            if( limpa ) limparForm();
             setOpen(false);
         }
         else
@@ -95,7 +98,7 @@ export const DetalheDeAdmiradores: React.FC = () => {
             });
     };
 
-    const { register, handleSubmit, formState, control, setValue } = useForm<IDetalheAdmirador>({
+    const { register, handleSubmit, formState, control, setValue, getValues } = useForm<IDetalheAdmirador>({
         defaultValues: {
             id: id === 'novo' ? undefined : Number(id),
             bairro: '',
@@ -112,6 +115,45 @@ export const DetalheDeAdmiradores: React.FC = () => {
     });
 
     const { errors } = formState;
+
+    const buscaCep = (cep: string) => {
+        setLimpa(false);
+        if (cep.length !== 8) {
+            setMsg("CEP inválido, deve ter 8 dígitos");
+            setTipoMsg("error");
+            setOpen(true);
+        }
+        else
+        {
+            ExternasService.getByCep(cep)
+            .then(data => {
+                if (data instanceof Error) {
+                    setMsg("CEP não encontrado");
+                    setTipoMsg("error");
+                    setOpen(true);
+                } else {
+                    setValue('endereco', data.logradouro);
+                    setValue('bairro', data.bairro);
+                    setValue('cidade', data.localidade);
+                    setValue('uf', data.uf);
+                    setMsg("Endereço atualizado com sucesso!");
+                    setTipoMsg("success");
+                    setOpen(true);
+                }
+            });
+        }
+
+    };
+    
+    const handleBuscarCep = () => {
+        const cep = getValues('cep'); 
+        if (cep) {
+                buscaCep(cep); 
+            } else {
+                setMsg("CEP vazio ou inválido");
+                setTipoMsg("error");
+            }
+    };
 
     const onSubmit = (data: IDetalheAdmirador) => {
         handleSalvar(data);
@@ -136,6 +178,7 @@ export const DetalheDeAdmiradores: React.FC = () => {
                     setMsg("Erro ao incluir um admirador")
                     setOpen(true);
                 } else {
+                    setLimpa(true);
                     setTipoMsg("success");
                     setMsg("Admirador incluído com sucesso!")
                     setOpen(true);
@@ -171,6 +214,7 @@ export const DetalheDeAdmiradores: React.FC = () => {
                     }
                 });
         } else {
+            setLimpa(true);
             limparForm();
         }
     }, [id]);
@@ -351,7 +395,8 @@ export const DetalheDeAdmiradores: React.FC = () => {
                         variant="contained"
                         color="primary"
                         disableElevation
-                        // onClick={}
+                        type="button"
+                        onClick={handleBuscarCep}
                         endIcon={<Icon>email</Icon>}
                         sx={{ ml: 2 }}
                       >
