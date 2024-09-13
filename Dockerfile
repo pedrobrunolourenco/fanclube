@@ -10,8 +10,8 @@ COPY . .
 
 EXPOSE 3000
 
-# Comando para rodar a aplicação React
 CMD ["npm", "start"]
 
+#docker stop $(docker ps -q --filter "publish=3000")
 #docker build -t fanclube .
 #docker run -d -p 3000:3000 fanclube

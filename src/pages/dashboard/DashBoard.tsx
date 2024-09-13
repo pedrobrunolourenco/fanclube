@@ -133,7 +133,7 @@ export const DashBoard: React.FC = () => {
                         <Card>
                             <CardContent>
                                 <Typography variant="h5" align="center">
-                                    Gráfico por UF
+                                    Admiradores Distribuídos por UF (TOP 6)
                                 </Typography>
                                 <Box padding={2} display="flex" justifyContent="center" alignItems="center">
                                     {isLoading ? <Typography>Carregando...</Typography> : <Pie data={dataUf} options={options} />}
@@ -145,7 +145,7 @@ export const DashBoard: React.FC = () => {
                         <Card>
                             <CardContent>
                                 <Typography variant="h5" align="center">
-                                    Gráfico por Idade
+                                    Admiradores Distribuídos por Idade (TOP 6)
                                 </Typography>
                                 <Box padding={2} display="flex" justifyContent="center" alignItems="center">
                                     {isLoading ? <Typography>Carregando...</Typography> : <Pie data={dataIdade} options={options} />}
