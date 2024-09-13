@@ -16,6 +16,30 @@ export interface IListagemAdmirador {
     uf: string;
 }
 
+interface ContagemAdmiradorIdadeItem {
+    count: number;
+    idade: number;
+}
+
+interface ContagemAdmiradorIdadeResponse {
+    data: ContagemAdmiradorIdadeItem[];
+    sucesso: boolean;
+}
+
+
+interface ContagemAdmiradorUfItem {
+    count: number;
+    uf: string;
+}
+
+interface ContagemAdmiradorUfResponse {
+    data: ContagemAdmiradorUfItem[];
+    sucesso: boolean;
+}
+
+
+
+
 export interface IDetalheAdmirador {
     bairro: string;
     cep: string;
@@ -70,6 +94,30 @@ export interface IRetornoAdmirador {
 
 
 const urlBase = Enviroment.URL_ADMIRADOR;
+
+const getContagemUF = async (): Promise<ContagemAdmiradorUfResponse | Error> => {
+    try {
+        const urlRelativa = urlBase + `/top_admiradores_uf`;
+        const { data } = await Api.get(urlRelativa);
+        return data;  
+
+    } catch (error) {
+        return new Error((error as { message: string }).message || 'Erro ao listar admiradores.');
+    }
+};
+
+
+const getContagemIdade = async (): Promise<ContagemAdmiradorIdadeResponse | Error> => {
+    try {
+        const urlRelativa = urlBase + `/top_admiradores_idade`;
+        const { data } = await Api.get(urlRelativa);
+        return data;  
+
+    } catch (error) {
+        return new Error((error as { message: string }).message || 'Erro ao listar admiradores.');
+    }
+};
+
 
 
 const updateById = async (notavel: IDetalheAdmirador): Promise<IDetalheAdmirador> => {
@@ -171,6 +219,8 @@ const getAll = async (page = 0, busca=''): Promise<TAdmiradorComTotalCount | Err
     }
 };
 
+
+
 const deleteById = async (id: number): Promise<void | Error> => {
     try {
         const urlRelativa = urlBase + `/removebyid?id=${id}`;
@@ -190,4 +240,6 @@ export const AdmiradoresService = {
     create,
     updateById,
     deleteById,
+    getContagemUF,
+    getContagemIdade,
 };
