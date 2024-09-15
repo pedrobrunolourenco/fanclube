@@ -34,9 +34,8 @@ export const DetalheDeAdmiradores: React.FC = () => {
                 .then((result) => {
                     setIsLoading(false);
                     if (result instanceof Error) {
-                        // Trate o erro conforme necessário
                     } else {
-                        setOpcoes(result.data.map(notavel => ({ id: notavel.id, label: notavel.nome })));
+                        setOpcoes(result.data.map(notavel => ({ id: notavel.id, label: notavel.apelido })));
                     }
                 });
         });
@@ -55,7 +54,7 @@ export const DetalheDeAdmiradores: React.FC = () => {
     });
 
     const [msg, setMsg] = useState("");
-    const [tipoMsg, setTipoMsg] = useState<any>("warning");
+    const [tipoMsg, setTipoMsg] = useState<"error" | "success" | "warning">("warning");
     const [limpa, setLimpa] = useState(false);
 
 
@@ -142,8 +141,10 @@ export const DetalheDeAdmiradores: React.FC = () => {
                 }
             });
         }
-
     };
+
+
+
     
     const handleBuscarCep = () => {
         const cep = getValues('cep'); 
@@ -174,6 +175,7 @@ export const DetalheDeAdmiradores: React.FC = () => {
         if (id === "novo") {
             AdmiradoresService.create(data).then(result => {
                 if (result instanceof Error) {
+                    setLimpa(false);
                     setTipoMsg("error");
                     setMsg("Erro ao incluir um admirador")
                     setOpen(true);
@@ -188,6 +190,7 @@ export const DetalheDeAdmiradores: React.FC = () => {
 
         // alterar
         if (id !== "novo") {
+            setLimpa(false);
             AdmiradoresService.updateById(data).then(result => {
                 if (result instanceof Error) {
                     setTipoMsg("error");
@@ -273,6 +276,7 @@ export const DetalheDeAdmiradores: React.FC = () => {
                     component={Paper}>
 
                 <Stack spacing={2} width={600} margin={5}>
+                    
                     <TextField
                         autoComplete='off'
                         size="small"
@@ -391,19 +395,19 @@ export const DetalheDeAdmiradores: React.FC = () => {
                             helperText={errors.cep?.message}
                         />
 
-                     <Button
-                        variant="contained"
-                        color="primary"
-                        disableElevation
-                        type="button"
-                        onClick={handleBuscarCep}
-                        endIcon={<Icon>email</Icon>}
-                        sx={{ ml: 2 }}
-                      >
-                        <Typography variant="button" whiteSpace="nowrap" textOverflow="ellipsis" overflow="hidden">
-                            Atualizar Endereço Pelo CEP
-                        </Typography>
-                     </Button>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            disableElevation
+                            type="button"
+                            onClick={handleBuscarCep}
+                            endIcon={<Icon>email</Icon>}
+                            sx={{ ml: 2 }}
+                        >
+                            <Typography variant="button" whiteSpace="nowrap" textOverflow="ellipsis" overflow="hidden">
+                                Atualizar Endereço Pelo CEP
+                            </Typography>
+                        </Button>
 
                     </Box>
 
@@ -494,6 +498,7 @@ export const DetalheDeAdmiradores: React.FC = () => {
 
 
                 </Stack>
+
                 </Box>
             </form>
 

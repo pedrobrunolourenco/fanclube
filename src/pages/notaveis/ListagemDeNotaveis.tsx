@@ -104,6 +104,7 @@ export const ListagemDeNotaveis: React.FC = () => {
             titulo="Listagem de Notáveis"
             barraDeFerramentas={
                 <FerramentasDaListagem 
+                   placeHolder="Pesquisar por Apelido"
                    textoBotaoNovo="Novo"
                    mostrarInputBusca={true}
                    textoDaBusca={busca}
@@ -118,6 +119,7 @@ export const ListagemDeNotaveis: React.FC = () => {
                 <TableHead>
                     <TableRow>
                         <TableCell>Ações</TableCell>
+                        <TableCell>Foto</TableCell>
                         <TableCell>Nome</TableCell>
                         <TableCell>Apelido</TableCell>
                         <TableCell>Atividade</TableCell>
@@ -136,8 +138,15 @@ export const ListagemDeNotaveis: React.FC = () => {
                                     <Icon>edit</Icon>
                                 </IconButton>
                             </TableCell>
-                            <TableCell>{row.nome}</TableCell>
+                            <TableCell>
+                                <img 
+                                    src={row.imagem || 'https://via.placeholder.com/300'} 
+                                    alt="Imagem do notável" 
+                                    style={{ width: '50px', height: 'auto', objectFit: 'cover' }} 
+                                />
+                            </TableCell>
                             <TableCell>{row.apelido}</TableCell>
+                            <TableCell>{row.nome}</TableCell>
                             <TableCell>{row.atividade}</TableCell>
                        </TableRow>
                       ))

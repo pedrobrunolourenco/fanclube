@@ -19,8 +19,36 @@ export interface IDetalheCep {
     siafi : string
 }
 
+export interface IDetalheWikPedia {
+    imagem: string,
+    apelido: string,
+    atividade: string,
+    descricao: string
+}
+
 
 const urlCep = Enviroment.URL_CEP;
+const urlWik = Enviroment.URL_WIKPEDIA;
+
+const getByWikPedia = async (apelido: string): Promise<IDetalheWikPedia | Error> => {
+    try {
+        const chave = apelido.split(" ").join("_");
+        const urlRelativa = urlWik + `/${chave}`;
+        const { data } = await Api.get(urlRelativa);
+        if (!data.erro) {
+           return {
+             imagem: data.thumbnail.source,
+             apelido: apelido,
+             atividade: data.description,
+             descricao: data.extract
+           }
+        }
+        return new Error('Notável não localizado.');
+    } catch (error) {
+        return new Error((error as { message: string }).message || 'Erro na consulta do notável.');
+    }
+};
+
 
 
 const getByCep = async (cep: string): Promise<IDetalheCep | Error> => {
@@ -32,7 +60,7 @@ const getByCep = async (cep: string): Promise<IDetalheCep | Error> => {
         }
         return new Error('CEP não localizado.');
     } catch (error) {
-        return new Error((error as { message: string }).message || 'Erro procurar CEP.');
+        return new Error((error as { message: string }).message || 'Erro na consulta do CEP.');
     }
 };
 
@@ -40,5 +68,6 @@ const getByCep = async (cep: string): Promise<IDetalheCep | Error> => {
 
 
 export const ExternasService = {
-    getByCep
+    getByCep,
+    getByWikPedia
 };

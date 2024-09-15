@@ -1,20 +1,27 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { LayOutBaseDePagina } from "../../shared/layouts";
 import { FerramentasDeDetalhe } from "../../shared/components";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
-import { TextField, Box, Stack, Slide, Alert, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Paper } from "@mui/material";
+import { TextField, Box, Stack, Slide, Alert, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Paper, Icon, Typography, Card, CardMedia } from "@mui/material";
 import { useForm } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
 
 import { NotaveisService, IDetalheNotavel } from "../../shared/services/api/notaveis/NotaveisService";
 import React from "react";
 import Snackbar from '@mui/material/Snackbar';
+import { ExternasService } from "../../shared/services/api/externas/ExternasService";
 
 export const DetalheDeNotaveis: React.FC = () => {
     const { id = 'novo' } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [nome, setNome] = useState("");
+
+    const [imagemUrl, setImagemUrl] = useState('');
+    
+    const handleImagemChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setImagemUrl(event.target.value);
+    };
 
     const [open, setOpen] = useState(false);
     const [openDialog, setOpenDialoog] = useState({
@@ -23,14 +30,16 @@ export const DetalheDeNotaveis: React.FC = () => {
     });
 
     const [msg, setMsg] = useState("");
-    const [tipoMsg, setTipoMsg] = useState<any>("warning");
+    const [tipoMsg, setTipoMsg] = useState<"error" | "success" | "warning">("warning");
+    const [limpa, setLimpa] = useState(false);
+
 
     const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === "clickaway") {
             return;
         }
         if (id === "novo") {
-            limparForm();
+            if( limpa ) limparForm();
             setOpen(false);
         }
         else
@@ -65,18 +74,62 @@ export const DetalheDeNotaveis: React.FC = () => {
     };
 
 
-    const { register, handleSubmit, formState, control, setValue } = useForm<IDetalheNotavel>({
+    const { register, handleSubmit, formState, control, setValue, getValues } = useForm<IDetalheNotavel>({
         defaultValues: {
             id: id === 'novo' ? undefined : Number(id),
             nome: '',
             apelido: '',
             atividade: '',
-            descricao: ''
+            descricao: '',
+            imagem: ''
         }
     });
 
 
     const { errors } = formState;
+
+
+
+    const buscaNotavel = (apelido: string) => {
+        setOpen(false);
+        setLimpa(false);
+    
+        if (apelido.length === 0) {
+            setMsg("Informe o apelido");
+            setTipoMsg("error");
+            setOpen(true);
+            return;
+        }
+    
+        ExternasService.getByWikPedia(apelido)
+            .then(data => {
+                if (data instanceof Error || !data) {
+                    setMsg("Notável não encontrado");
+                    setTipoMsg("error");
+                } else {
+                    setValue('atividade', data.atividade);
+                    setValue('descricao', data.descricao);
+                    setValue('imagem', data.imagem);
+                    setImagemUrl(data.imagem || "");
+                    setMsg("Notável encontrado com sucesso");
+                    setTipoMsg("success");
+                }
+            })
+            .catch(() => {
+                setMsg("Erro ao buscar dados do notável");
+                setTipoMsg("error");
+            })
+            .finally(() => {
+                setOpen(true);  
+            });
+    };
+
+
+    const handleBuscarNotavel = () => {
+        setOpen(false);
+        const apelido = getValues('apelido'); 
+        buscaNotavel(apelido); 
+    };    
 
     const onSubmit = (data: IDetalheNotavel) => {
         handleSalvar(data);
@@ -95,11 +148,13 @@ export const DetalheDeNotaveis: React.FC = () => {
         {
             NotaveisService.create(data).then(result => {
                 if (result instanceof Error) {
+                    setLimpa(false);
                     setTipoMsg("error");
                     setMsg("Erro ao incluir um notável")
                     setOpen(true);
 
                 } else {
+                    setLimpa(true);
                     setTipoMsg("success");
                     setMsg("Notável incluído com sucesso!")
                     setOpen(true);
@@ -119,6 +174,7 @@ export const DetalheDeNotaveis: React.FC = () => {
                 } else {
                     setTipoMsg("success");
                     setNome(result.nome);
+                    setImagemUrl(result.imagem || ""); // Atualiza imagem ao buscar o notável
                     setMsg("Notável atualizado com sucesso!")
                     setOpen(true);
                 }
@@ -128,18 +184,22 @@ export const DetalheDeNotaveis: React.FC = () => {
     }
 
     useEffect(() => {
+        setOpen(false);
         if (id !== "novo") {
+            setLimpa(false);
             NotaveisService.getById(Number(id))
             .then((result) => {
                 if (result instanceof Error) {
                     navigate('/notaveis');
                 } else {
+                    setImagemUrl(result.imagem || ""); 
                     setNome(result.nome);
                     atribuirForm(result);
                 }
             });
         }
         else {
+            setLimpa(true);
             limparForm();
         }
     }, [id]);
@@ -152,6 +212,9 @@ export const DetalheDeNotaveis: React.FC = () => {
         setValue('apelido', data.apelido);
         setValue('atividade', data.atividade);
         setValue('descricao', data.descricao);
+        setValue('imagem', data.imagem);
+        setImagemUrl(data.imagem || ""); 
+
     }
 
     const limparForm= () => {
@@ -160,6 +223,9 @@ export const DetalheDeNotaveis: React.FC = () => {
         setValue('apelido', '');
         setValue('atividade', '');
         setValue('descricao', '');
+        setValue('imagem', '');
+        setImagemUrl(""); 
+
     }
 
     return (
@@ -187,6 +253,44 @@ export const DetalheDeNotaveis: React.FC = () => {
                     component={Paper}>
 
                 <Stack spacing={2} width={600} margin={5}>
+
+
+                    <Box width={600}>
+                        <TextField
+                                autoComplete='off'
+                                size="small"
+                                label="Apelido"
+                                type="text"
+                                variant="outlined"
+                                InputLabelProps={{ shrink: true }}
+                                {...register("apelido", {
+                                    required: "Apelido é obrigatório",
+                                    minLength: {
+                                        value: 2,
+                                        message: "O apelido deve ter pelo menos 2 letras"
+                                    }
+                                })}
+                                error={!!errors.apelido}
+                                helperText={errors.apelido?.message}
+                            />
+
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                disableElevation
+                                type="button"
+                                onClick={handleBuscarNotavel}
+                                endIcon={<Icon>star</Icon>}
+                                sx={{ ml: 2 }}
+                            >
+                                <Typography variant="button" whiteSpace="nowrap" textOverflow="ellipsis" overflow="hidden">
+                                    Buscar Notável
+                                </Typography>
+                            </Button>
+
+
+                    </Box>
+
                     <TextField
                         autoComplete='off'
                         size="small"
@@ -205,23 +309,6 @@ export const DetalheDeNotaveis: React.FC = () => {
                         helperText={errors.nome?.message}
                     />
 
-                    <TextField
-                        autoComplete='off'
-                        size="small"
-                        label="Apelido"
-                        type="text"
-                        variant="outlined"
-                        InputLabelProps={{ shrink: true }}
-                        {...register("apelido", {
-                            required: "Apelido é obrigatório",
-                            minLength: {
-                                value: 2,
-                                message: "O apelido deve ter pelo menos 2 letras"
-                            }
-                        })}
-                        error={!!errors.apelido}
-                        helperText={errors.apelido?.message}
-                    />
 
                     <TextField
                         autoComplete='off'
@@ -248,7 +335,7 @@ export const DetalheDeNotaveis: React.FC = () => {
                         type="text"
                         variant="outlined"
                         multiline
-                        rows={3}
+                        rows={10}
                         InputLabelProps={{ shrink: true }}
                         {...register("descricao", {
                             required: "Descrição é obrigatória",
@@ -261,8 +348,31 @@ export const DetalheDeNotaveis: React.FC = () => {
                         helperText={errors.descricao?.message}
                     />
                     
+                        {/* Campo oculto Imagem */}
+                        <TextField
+                            autoComplete='off'
+                            size="small"
+                            label="Imagem"
+                            type="text"
+                            variant="outlined"
+                            multiline
+                            InputLabelProps={{ shrink: true }}
+                            style={{ display: 'none' }} // Campo invisível
+                            {...register("imagem", {
+                                onChange: handleImagemChange, // Atualiza o estado ao mudar o valor
+                            })}
+                        />
 
                 </Stack>
+
+                    <Card sx={{ maxWidth: 300, maxHeight:300}}>
+                        <CardMedia
+                            component="img"
+                            height="300"
+                            image={imagemUrl || 'https://via.placeholder.com/300'} 
+                            alt="Imagem do notável"
+                        />
+                    </Card>                
 
               </Box>  
             </form>

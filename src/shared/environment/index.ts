@@ -5,7 +5,7 @@ export const Enviroment = {
     /**
      * Define a quantidade de linhas a ser carregada por padrão nas listagens
      */
-   LIMITE_DE_LINHAS: 7,
+   LIMITE_DE_LINHAS: 5,
 
    /**
     *  PlaceHolder exipidos nas inputs de pesquisa de listagem
@@ -20,6 +20,7 @@ export const Enviroment = {
    /**
     *  URL Base de consultas as APIs dessa aplicação
     */
+   URL_WIKPEDIA: "https://pt.wikipedia.org/api/rest_v1/page/summary",
    URL_CEP: 'https://viacep.com.br/ws',
    URL_NOTAVEL: 'http://localhost:8181',
    URL_ADMIRADOR: 'http://localhost:8383'

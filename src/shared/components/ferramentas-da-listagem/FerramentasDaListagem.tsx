@@ -9,6 +9,7 @@ interface IFerramentasDaListagemProps{
     textoBotaoNovo?: string;
     mostrarBotaoNovo?: boolean;
     aoClicarEmNovo?: () => void;
+    placeHolder?: string;
  
 };
 
@@ -18,15 +19,17 @@ export const FerramentasDaListagem: React.FC<IFerramentasDaListagemProps> = ({
     aoMudarTextoDeBusca,
     aoClicarEmNovo,
     textoBotaoNovo = "Novo",
-    mostrarBotaoNovo = true
+    mostrarBotaoNovo = true,
+    placeHolder = Enviroment.INPUT_DE_BUSCA
 }) => {
     const theme = useTheme()
     return(
        <Box 
-           height={theme.spacing(6)} 
+           height={theme.spacing(5)} 
            marginX={1} 
            paddingX={2} 
            display="flex" 
+           padding={2}
            gap={1} 
            alignItems="center"  
            component={Paper}
@@ -34,7 +37,7 @@ export const FerramentasDaListagem: React.FC<IFerramentasDaListagemProps> = ({
 
         { mostrarInputBusca && (
             <TextField 
-               placeholder={Enviroment.INPUT_DE_BUSCA}
+               placeholder={placeHolder}
                value={textoDaBusca}
                onChange={(e) => aoMudarTextoDeBusca?.(e.target.value)}
                size="small"

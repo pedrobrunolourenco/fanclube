@@ -98,6 +98,7 @@ export const ListagemDeAdmiradores: React.FC = () => {
             titulo="Listagem de Admiradores"
             barraDeFerramentas={
                 <FerramentasDaListagem
+                    placeHolder="Pesquisar por Nome"
                     textoBotaoNovo="Novo"
                     mostrarInputBusca={true}
                     textoDaBusca={busca}

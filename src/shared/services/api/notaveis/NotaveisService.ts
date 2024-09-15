@@ -9,6 +9,7 @@ export interface IListagemNotavel {
     apelido: string;
     atividade: string;
     descricao: string;
+    imagem: string;
 }
 
 export interface IDetalheNotavel {
@@ -17,6 +18,7 @@ export interface IDetalheNotavel {
     apelido: string;
     atividade: string;
     descricao: string;
+    imagem: string;
 }
 
 export interface ICreateNotavel {
@@ -24,6 +26,7 @@ export interface ICreateNotavel {
     apelido: string;
     atividade: string;
     descricao: string;
+    imagem: string;
 }
 
 
@@ -44,6 +47,7 @@ export interface IRetornoNotavel {
     descricao: string;
     id: number;
     nome: string;
+    imagem: string;
     sucesso: boolean;
 }
 
@@ -99,7 +103,8 @@ const create = async (notavel: IDetalheNotavel): Promise<IDetalheNotavel> => {
             nome: notavel.nome || '',
             apelido: notavel.apelido || '',
             atividade: notavel.atividade || '',
-            descricao: notavel.descricao || ''
+            descricao: notavel.descricao || '',
+            imagem: notavel.imagem || ''
         };
 
         const response = await Api.post<IRetornoNotavel>(
@@ -144,25 +149,6 @@ const getAll = async (page = 0, busca=''): Promise<TNotavelComTotalCount | Error
     }
 };
 
-const getAllSemFiltro = async (): Promise<TNotavelComTotalCount | Error> => {
-    try {
-        var urlRelativa = '/notaveis';
-
-        const { data, headers } = await Api.get(urlRelativa);
-        
-        if (data) {
-            return {
-                data,
-                totalCount: Number(headers['x-total-count'] || Enviroment.LIMITE_DE_LINHAS),
-            };
-        }
-
-        return new Error('Erro ao listar notáveis.');
-    } catch (error) {
-        console.log(error);
-        return new Error((error as { message: string }).message || 'Erro ao listar notáveis.');
-    }
-};
 
 const deleteById = async (id: number): Promise<void | Error> => {
     try {
@@ -179,7 +165,6 @@ const deleteById = async (id: number): Promise<void | Error> => {
 
 export const NotaveisService = {
     getAll,
-    getAllSemFiltro,
     getById,
     create,
     updateById,
