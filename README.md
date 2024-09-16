@@ -10,7 +10,7 @@ Trata-se de uma ideia de cunho didático que poderia ser aprimorada com recursos
 - Foi utilizado **React JS** versão 18.3.1 ou superior.
 - **TypeScript** 4.9.5 ou superior.
 - A estilização foi feita através da biblioteca **Material UI** 5.15.20, portanto, não foi necessário o uso de folhas de estilo CSS, sendo o projeto totalmente responsivo, utilizando os recursos de estilização do próprio Material UI.
-- Este projeto faz uso de 2 componentes internos (Api Rest) desenvolvidos em **Phyton** além de 2 componentes externos. Cada componente interno faz uso do seu próprio **Dockerfile**, e de seu próprio Repositório ambos em **SQLLite**, ORM **Sqlalchemy**, bancos com suas
+- Este projeto faz uso de 2 componentes internos (Api Rest) desenvolvidos em **Phyton** além de 2 componentes externos. Cada componente interno faz uso do seu próprio **Dockerfile**, e de seu próprio Repositório ambos em **SQLLite**, ORM **Sqlalchemy**, os bancos com suas
 respectivas tabelas são gerados automaticamente pelos componentes individualmente.
 
 ## 4. Subindo o componente Api-Notaveis
@@ -41,7 +41,7 @@ respectivas tabelas são gerados automaticamente pelos componentes individualmen
 ### 6.1 - Exemplo de uso da Api Externa disponibilizada pelo WikiPedia
 - **https://pt.wikipedia.org/api/rest_v1/page/summary/Chico_Buarque**
 
-### 6.2 - Exemplo de uso da Api Externa viacep disponibilizada pelo IBGE
+### 6.2 - Exemplo de uso da Api Externa disponibilizada pelo IBGE
 - **https://viacep.com.br/ws/01001000/json/**
 
 ## 7. Como subir o projeto Principal
