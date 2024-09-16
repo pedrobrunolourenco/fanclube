@@ -39,13 +39,10 @@ respectivas tabelas são gerados automaticamente pelos componentes individualmen
 
 ## 6. Apis Externas Utilizadas
 ### 6.1 - Exemplo de uso da Api Externa disponibilizada pelo WikiPedia
-   ```sh
-   **https://pt.wikipedia.org/api/rest_v1/page/summary/Chico_Buarque**
-   ```
+- **https://pt.wikipedia.org/api/rest_v1/page/summary/Chico_Buarque**
+
 ### 6.2 - Exemplo de uso da Api Externa viacep disponibilizada pelo IBGE
-   ```sh
-   **https://viacep.com.br/ws/01001000/json/**
-   ```
+- **https://viacep.com.br/ws/01001000/json/**
 
 ## 7. Como subir o projeto Principal
 ### 7.1
