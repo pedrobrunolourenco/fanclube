@@ -101,7 +101,7 @@ const create = async (notavel: IDetalheNotavel): Promise<IDetalheNotavel> => {
 
         const createNotavel: ICreateNotavel = {
             nome: notavel.nome || '',
-            apelido: notavel.apelido || '',
+            apelido: formatApelido(notavel.apelido) || '',
             atividade: notavel.atividade || '',
             descricao: notavel.descricao || '',
             imagem: notavel.imagem || ''
@@ -127,6 +127,16 @@ const create = async (notavel: IDetalheNotavel): Promise<IDetalheNotavel> => {
         }
     }
 };
+
+const formatApelido = (apelido: string): string => {
+    const palavras = apelido.trim().split(/\s+/);
+
+    const palavrasFormatadas = palavras.map(palavra =>
+        palavra.charAt(0).toUpperCase() + palavra.slice(1).toLowerCase()
+    );
+    return palavrasFormatadas.join(' ');
+};
+
 
 const getAll = async (page = 0, busca=''): Promise<TNotavelComTotalCount | Error> => {
     try {

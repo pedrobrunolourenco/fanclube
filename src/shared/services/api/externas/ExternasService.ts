@@ -32,7 +32,8 @@ const urlWik = Enviroment.URL_WIKPEDIA;
 
 const getByWikPedia = async (apelido: string): Promise<IDetalheWikPedia | Error> => {
     try {
-        const chave = apelido.split(" ").join("_");
+        const apelidoFormatado = formatApelido(apelido);
+        const chave = apelidoFormatado.split(" ").join("_");
         const urlRelativa = urlWik + `/${chave}`;
         const { data } = await Api.get(urlRelativa);
         if (!data.erro) {
@@ -49,6 +50,14 @@ const getByWikPedia = async (apelido: string): Promise<IDetalheWikPedia | Error>
     }
 };
 
+const formatApelido = (apelido: string): string => {
+    const palavras = apelido.trim().split(/\s+/);
+
+    const palavrasFormatadas = palavras.map(palavra =>
+        palavra.charAt(0).toUpperCase() + palavra.slice(1).toLowerCase()
+    );
+    return palavrasFormatadas.join(' ');
+};
 
 
 const getByCep = async (cep: string): Promise<IDetalheCep | Error> => {

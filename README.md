@@ -21,7 +21,7 @@ respectivas tabelas são gerados automaticamente pelos componentes individualmen
 ### 4.3 - Executar os comandos abaixo
    ```sh
    docker build -t api-notaveis .
-   docker run -d -p 8181:8181 api-notaveis
+   docker docker run -d -v notaveis_volume:/app/database -p 8181:8181 api-notaveis
    ```
 - Feito isso a documentação do componente api-notaveis é disponibilizada em `localhost:8181`.
 
@@ -33,7 +33,7 @@ respectivas tabelas são gerados automaticamente pelos componentes individualmen
 ### 5.3 - Executar os comandos abaixo
    ```sh
    docker build -t api-admiradores .
-   docker run -d -p 8383:8383 api-admiradores
+   docker run -d -v admiradores_volume:/app/database -p 8383:8383 api-admiradores
    ```
 - Feito isso a documentação do componente api-admiradores é disponibilizada em `localhost:8383`.
 
