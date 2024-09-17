@@ -17,7 +17,7 @@ respectivas tabelas são gerados automaticamente pelos componentes individualmen
 ### 4.1
 - Clonar o projeto em **https://github.com/pedrobrunolourenco/notaveis**
 ### 4.2
-- Abrir um novo terminal na pasta do projeto (onde se encontra o arquivo Dockerfile).
+- Abrir um novo terminal na pasta do projeto (onde se encontra o arquivo Dockerfile do projeto Phyton Api-Notaveis).
 ### 4.3 - Executar os comandos abaixo
    ```sh
    docker build -t api-notaveis .
@@ -29,7 +29,7 @@ respectivas tabelas são gerados automaticamente pelos componentes individualmen
 ### 5.1
 - Clonar o projeto em **https://github.com/pedrobrunolourenco/admiradores**
 ### 5.2
-- Abrir um novo terminal na pasta do projeto (onde se encontra o arquivo Dockerfile).
+- Abrir um novo terminal na pasta do projeto (onde se encontra o arquivo Dockerfile do projeto Phyton Api-Admiradores).
 ### 5.3 - Executar os comandos abaixo
    ```sh
    docker build -t api-admiradores .
@@ -46,7 +46,7 @@ respectivas tabelas são gerados automaticamente pelos componentes individualmen
 
 ## 7. Como subir o projeto Principal
 ### 7.1
-- Abrir um novo terminal na pasta do projeto (onde se encontra o arquivo Dockerfile).
+- Abrir um novo terminal na pasta do projeto (onde se encontra o arquivo Dockerfile do projeto Principal React fanclube).
 ### 7.2 - Executar os comandos abaixo
    ```sh
    docker build -t fanclube .
