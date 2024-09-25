@@ -27,6 +27,7 @@ export const DashBoard: React.FC = () => {
             ]);
     
             if (ufResult instanceof Error || idadeResult instanceof Error) {
+                console.log("erro ao buscar dados do grafico")
                 return;
             }
     
